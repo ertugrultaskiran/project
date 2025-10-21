@@ -1,0 +1,61 @@
+════════════════════════════════════════════════════════════════════
+GİTHUB'A PUSH KOMUTLARI
+════════════════════════════════════════════════════════════════════
+
+ADIM 1: Git Bash'i Aç
+─────────────────────
+• Proje klasörünü Dosya Gezgini'nde aç
+• Klasörde boş yere SAĞ TIK
+• "Git Bash Here" seçeneğine tıkla
+
+
+ADIM 2: Git Initialize (İlk Kez)
+─────────────────────────────────
+git init
+git branch -M main
+
+
+ADIM 3: Dosyaları Ekle
+──────────────────────
+git add .
+git status
+
+
+ADIM 4: Commit (Kaydet)
+───────────────────────
+git commit -m "Initial commit: NLP Ticket Classification Project - 4 models (Baseline, LSTM, Ensemble, BERT) with 88.82% accuracy"
+
+
+ADIM 5: Remote Repository Bağla
+────────────────────────────────
+git remote add origin https://github.com/ertugrultaskiran/project.git
+
+
+ADIM 6: Push (Yükle)
+────────────────────
+git push -u origin main
+
+
+════════════════════════════════════════════════════════════════════
+
+HATA ALINIRSA:
+──────────────
+
+Eğer "remote origin already exists" hatası alırsanız:
+git remote remove origin
+git remote add origin https://github.com/ertugrultaskiran/project.git
+git push -u origin main
+
+Eğer authentication hatası alırsanız:
+GitHub Personal Access Token gerekir.
+1. GitHub → Settings → Developer settings → Personal access tokens
+2. Generate new token (classic)
+3. repo seçeneğini işaretle
+4. Token'ı kopyala
+5. Push yaparken şifre yerine token'ı kullan
+
+════════════════════════════════════════════════════════════════════
+
+TEK TEK KOMUTLAR (KOPYALA-YAPIŞTIR):
+════════════════════════════════════════════════════════════════════
+

@@ -1,0 +1,604 @@
+════════════════════════════════════════════════════════════════════
+BİTİRME PROJESİ
+Müşteri Destek Taleplerinin Otomatik Sınıflandırılması
+NLP ve Derin Öğrenme ile Topic Modelling
+════════════════════════════════════════════════════════════════════
+
+Öğrenci: [Adınız Soyadınız]
+Danışman: [Hoca Adı]
+Tarih: 21 Ekim 2025
+
+════════════════════════════════════════════════════════════════════
+
+
+1. PROJE AMACI
+════════════════════════════════════════════════════════════════════
+
+Problem:
+• Şirketlerde günde yüzlerce IT destek talebi geliyor
+• Taleplerin doğru departmana yönlendirilmesi zaman alıyor
+• Manuel işlem hatalara ve gecikmelere yol açıyor
+
+Çözüm:
+• Yapay zeka ile otomatik sınıflandırma sistemi
+• Gelen talepleri anlık olarak doğru kategoriye atama
+• %88.82 doğruluk oranı ile çalışan akıllı sistem
+
+
+════════════════════════════════════════════════════════════════════
+
+
+2. VERİ SETİ
+════════════════════════════════════════════════════════════════════
+
+Veri Kaynağı:
+• IT Destek Sistemi kayıtları
+• Gerçek şirket verileri
+• İngilizce metin verileri
+
+Veri Boyutu:
+• Toplam: 47,837 destek talebi (ticket)
+• Sütunlar: text (talep metni), label (kategori)
+• 8 farklı kategori
+
+Kategoriler ve Dağılım:
+1. Hardware (Donanım)                13,617 ticket (%28.5)
+2. HR Support (İnsan Kaynakları)     10,915 ticket (%22.8)
+3. Access (Erişim İzinleri)           7,125 ticket (%14.9)
+4. Miscellaneous (Diğer)              7,060 ticket (%14.8)
+5. Storage (Depolama)                 2,777 ticket (%5.8)
+6. Purchase (Satın Alma)              2,464 ticket (%5.2)
+7. Internal Project (İç Projeler)     2,119 ticket (%4.4)
+8. Administrative Rights (Admin)      1,760 ticket (%3.7)
+
+Veri Bölümleme:
+• Train Set: %80 (38,269 ticket) - Model eğitimi
+• Validation Set: %10 (4,784 ticket) - Parametre ayarı
+• Test Set: %10 (4,784 ticket) - Final değerlendirme
+
+
+════════════════════════════════════════════════════════════════════
+
+
+3. KULLANILAN YÖNTEMLER
+════════════════════════════════════════════════════════════════════
+
+Projem 4 farklı makine öğrenmesi ve derin öğrenme yaklaşımını 
+karşılaştırmalı olarak içermektedir:
+
+
+MODEL 1: BASELINE - TF-IDF + Logistic Regression
+────────────────────────────────────────────────
+
+Açıklama:
+Klasik makine öğrenmesi yaklaşımı. Metin verilerini TF-IDF ile 
+sayısal vektörlere dönüştürüp Logistic Regression ile sınıflandırma.
+
+Teknik Detay:
+• TF-IDF Vectorization
+  - min_df: 3 (En az 3 dokümanda geçen kelimeler)
+  - max_df: 0.9 (Çok sık geçenleri filtrele)
+  - ngram_range: (1,2) (Tek ve iki kelime kombinasyonları)
+
+• Logistic Regression
+  - max_iter: 200
+  - Class weights: Dengesiz sınıf problemi çözümü
+
+Avantajlar:
+✓ Çok hızlı eğitim (5 dakika)
+✓ Açıklanabilir model
+✓ Az hesaplama kaynağı
+✓ Stabil ve güvenilir
+
+Dezavantajlar:
+✗ Kelime sırasını anlamaz
+✗ Bağlamsal ilişkileri kaçırır
+
+Sonuç: %86.04 Test Accuracy
+
+
+MODEL 2: DEEP LEARNING - Word2Vec + Bidirectional LSTM
+────────────────────────────────────────────────────────
+
+Açıklama:
+Derin öğrenme yaklaşımı. Word2Vec ile anlamsal kelime vektörleri 
+oluşturup, Bidirectional LSTM ile sıralı metin analizi.
+
+Teknik Detay:
+• Word2Vec Embedding
+  - Vector size: 200 boyut
+  - Window: 5 (Bağlam penceresi)
+  - Skip-gram algoritması
+  - Vocabulary: 11,661 kelime
+
+• Bidirectional LSTM
+  - 128 LSTM units
+  - Dropout: 0.3 (Overfitting önleme)
+  - GlobalMaxPooling
+  - 8 sınıf için softmax çıkış
+
+Mimari:
+Input → Embedding (200d) → SpatialDropout → BiLSTM (128) → 
+GlobalMaxPooling → Dropout → Dense (8) → Softmax
+
+Avantajlar:
+✓ Kelime sırasını anlar
+✓ Bağlamsal ilişkileri yakalar
+✓ Anlamsal benzerlik (car ≈ automobile)
+✓ İki yönlü okuma (ileri-geri)
+
+Dezavantajlar:
+✗ Yavaş eğitim (30 dakika)
+✗ GPU tercih edilir
+✗ Daha karmaşık
+
+Sonuç: %87.00 Test Accuracy (+0.96%)
+
+
+MODEL 3: ENSEMBLE - Baseline + LSTM Kombinasyonu
+────────────────────────────────────────────────
+
+Açıklama:
+Birden fazla modelin tahminlerini birleştirerek daha güvenilir 
+sonuçlar elde etme yaklaşımı.
+
+Teknik Detay:
+• Weighted Average Ensemble
+  - Baseline weight: 0.5
+  - LSTM weight: 0.5
+  - Farklı kombinasyonlar test edildi
+  - En iyi: Equal weights
+
+Yöntem:
+Ensemble = (0.5 × Baseline_Prob) + (0.5 × LSTM_Prob)
+
+Avantajlar:
+✓ Daha yüksek doğruluk
+✓ Daha güvenilir tahminler
+✓ Model hatalarını dengeler
+✓ Kolay implementasyon
+
+Dezavantajlar:
+✗ İki model birlikte çalışmalı
+✗ Tahmin süresi 2 katına çıkar
+✗ Deployment karmaşık
+
+Sonuç: %88.40 Test Accuracy (+2.36%)
+
+
+MODEL 4: BERT - Transfer Learning (Fine-Tuning)
+────────────────────────────────────────────────
+
+Açıklama:
+Google tarafından geliştirilmiş, milyarlarca kelime ile önceden 
+eğitilmiş transformer modelinin bizim veriye uyarlanması.
+
+Teknik Detay:
+• Pre-trained Model: bert-base-uncased
+  - 110 milyon parametre
+  - 12 transformer layer
+  - 768 boyutlu hidden states
+
+• Fine-tuning Parametreleri:
+  - Epochs: 3
+  - Batch size: 16
+  - Learning rate: 2e-5
+  - Max length: 128 token
+  - Optimizer: AdamW
+
+• Hardware:
+  - GPU: NVIDIA GeForce RTX 2060
+  - CUDA acceleration
+  - Eğitim süresi: ~2.5 saat
+
+Attention Mechanism:
+Her kelimenin diğer tüm kelimelerle ilişkisini analiz eder.
+Bağlamı tam olarak anlar.
+
+Avantajlar:
+✓ En yüksek performans (%88.82)
+✓ Transfer learning (milyarlarca kelime bilgisi)
+✓ Attention mechanism (derin bağlam anlama)
+✓ Robust (farklı yazım stillerine dayanıklı)
+✓ State-of-the-art teknoloji
+
+Dezavantajlar:
+✗ Yavaş eğitim (~2.5 saat)
+✗ GPU zorunlu
+✗ Büyük model boyutu (~400 MB)
+✗ Yüksek kaynak tüketimi
+
+Sonuç: %88.82 Test Accuracy (+2.78%) 🏆 EN İYİ MODEL
+
+
+════════════════════════════════════════════════════════════════════
+
+
+4. SONUÇLAR VE KARŞILAŞTIRMA
+════════════════════════════════════════════════════════════════════
+
+Model Performans Karşılaştırması:
+
+┌─────────────────────────────┬──────────┬────────────┬─────────────┐
+│ Model                       │ Accuracy │ Eğitim     │ Tahmin      │
+├─────────────────────────────┼──────────┼────────────┼─────────────┤
+│ Baseline (TF-IDF + LogReg)  │  86.04%  │   5 dk     │  0.01 sn    │
+│ LSTM (Word2Vec + BiLSTM)    │  87.00%  │  30 dk     │  0.05 sn    │
+│ Ensemble (Base + LSTM)      │  88.40%  │   0 dk     │  0.06 sn    │
+│ BERT Fine-tuned             │  88.82%  │ 150 dk     │  0.10 sn    │
+└─────────────────────────────┴──────────┴────────────┴─────────────┘
+
+İyileştirme Oranları:
+• LSTM vs Baseline:    +0.96%
+• Ensemble vs Baseline: +2.36%
+• BERT vs Baseline:     +2.78%
+
+
+Detaylı Metrikler (BERT - En İyi Model):
+
+Sınıf                    Precision   Recall   F1-Score   Support
+──────────────────────────────────────────────────────────────────
+Purchase                   0.96      0.91      0.94        247
+Storage                    0.93      0.91      0.92        277
+Access                     0.90      0.93      0.92        713
+HR Support                 0.91      0.89      0.90      1,091
+Internal Project           0.91      0.87      0.89        212
+Hardware                   0.87      0.88      0.88      1,362
+Miscellaneous              0.84      0.85      0.85        706
+Administrative rights      0.88      0.81      0.84        176
+──────────────────────────────────────────────────────────────────
+Accuracy                                       0.89      4,784
+Macro avg                  0.90      0.88      0.89      4,784
+Weighted avg               0.89      0.89      0.89      4,784
+
+
+En Başarılı Sınıflar:
+1. Purchase:         F1 = 0.938 (Mükemmel!)
+2. Storage:          F1 = 0.922 (Çok İyi!)
+3. Access:           F1 = 0.915 (Harika!)
+
+Geliştirilebilir Sınıflar:
+1. Administrative rights: F1 = 0.840 (Az veri)
+2. Miscellaneous:         F1 = 0.847 (Karışık kategori)
+
+
+════════════════════════════════════════════════════════════════════
+
+
+5. KULLANILAN TEKNOLOJİLER
+════════════════════════════════════════════════════════════════════
+
+Programlama Dili:
+• Python 3.13
+
+Makine Öğrenmesi Kütüphaneleri:
+• Scikit-learn (Baseline model)
+• TensorFlow 2.20 (LSTM model)
+• PyTorch 2.9 (BERT model)
+• Transformers 4.57 (Hugging Face BERT)
+• Gensim 4.0+ (Word2Vec)
+
+Veri İşleme:
+• Pandas (Veri manipülasyonu)
+• NumPy (Sayısal işlemler)
+• NLTK / Regex (Metin temizleme)
+
+Görselleştirme:
+• Matplotlib (Grafikler)
+• Seaborn (İstatistiksel grafikler)
+
+API ve Deployment:
+• Flask (REST API)
+• Docker (Containerization)
+
+Hardware:
+• GPU: NVIDIA GeForce RTX 2060 (6 GB VRAM)
+• CUDA 11.8 ile GPU acceleration
+
+
+════════════════════════════════════════════════════════════════════
+
+
+6. UYGULAMA AKIŞI
+════════════════════════════════════════════════════════════════════
+
+Adım 1: Veri Hazırlama
+• 47,837 ticket verisi yüklendi
+• Metin temizleme (URL, özel karakter)
+• Null değer kontrolü
+• Sınıf dağılımı analizi
+
+Adım 2: Veri Bölümleme
+• Stratified split (sınıf dengesi korundu)
+• Train: %80, Validation: %10, Test: %10
+• Random state: 42 (tekrarlanabilirlik)
+
+Adım 3: Model Eğitimleri
+• Baseline: TF-IDF vektörleştirme + LogReg eğitimi
+• LSTM: Word2Vec + tokenization + LSTM eğitimi
+• Ensemble: Model tahminlerini birleştirme
+• BERT: Pre-trained model + fine-tuning
+
+Adım 4: Değerlendirme
+• Test seti ile performans ölçümü
+• Confusion matrix analizi
+• Sınıf bazında metrikler
+• Model karşılaştırması
+
+Adım 5: Production Deployment
+• REST API geliştirildi
+• 3 farklı model endpoint'i
+• Health check servisi
+
+
+════════════════════════════════════════════════════════════════════
+
+
+7. TEKNİK DETAYLAR
+════════════════════════════════════════════════════════════════════
+
+Baseline Model (TF-IDF + Logistic Regression):
+─────────────────────────────────────────────
+• Vektörleştirme: TF-IDF (ngram: 1-2)
+• Sınıflandırıcı: Logistic Regression
+• Class weights: Balanced (dengesiz veri çözümü)
+• Eğitim süresi: 5 dakika
+• Model boyutu: 7.5 MB
+
+
+LSTM Model (Word2Vec + Bidirectional LSTM):
+─────────────────────────────────────────────
+• Embedding: Word2Vec (200 dim, skip-gram)
+• Vocabulary: 11,661 kelime
+• Max sequence length: 80 token
+• LSTM units: 128 (Bidirectional)
+• Dropout: 0.3
+• Activation: Softmax
+• Loss: Sparse categorical crossentropy
+• Optimizer: Adam
+• Eğitim süresi: 30 dakika
+• Model boyutu: 13.4 MB
+
+
+Ensemble Model:
+─────────────────────────────────────────────
+• Yöntem: Weighted average
+• Weights: 0.5 (Baseline) + 0.5 (LSTM)
+• 4 farklı kombinasyon test edildi
+• En iyi: Equal weights
+• Tahmin süresi: 0.06 saniye
+
+
+BERT Model (Transfer Learning):
+─────────────────────────────────────────────
+• Base model: bert-base-uncased (110M parameters)
+• Fine-tuning: 3 epochs
+• Batch size: 16
+• Max length: 128 tokens
+• Learning rate: 2e-5
+• Optimizer: AdamW
+• Scheduler: Linear warmup
+• Hardware: GPU (CUDA acceleration)
+• Eğitim süresi: 2.5 saat
+• Model boyutu: 440 MB
+
+
+════════════════════════════════════════════════════════════════════
+
+
+8. PERFORMANS ANALİZİ
+════════════════════════════════════════════════════════════════════
+
+Model Accuracy Karşılaştırması:
+
+Baseline (86.04%)     ████████████████████████████████████████
+LSTM (87.00%)         █████████████████████████████████████████
+Ensemble (88.40%)     ██████████████████████████████████████████
+BERT (88.82%)         ██████████████████████████████████████████▌ 🏆
+
+
+İyileştirme Grafiği:
+
+Başlangıç → Baseline:  86.04%
+Baseline → LSTM:       +0.96% iyileştirme
+LSTM → Ensemble:       +1.40% iyileştirme
+Ensemble → BERT:       +0.42% iyileştirme
+──────────────────────────────────────────
+TOPLAM İYİLEŞTİRME:    +2.78% (86.04 → 88.82)
+
+
+Sınıf Bazında F1-Score (BERT):
+
+Purchase              ████████████████████████████ 0.938
+Storage               ███████████████████████████  0.922
+Access                ██████████████████████████   0.915
+HR Support            █████████████████████████    0.900
+Internal Project      █████████████████████████    0.887
+Hardware              ████████████████████████     0.877
+Miscellaneous         ████████████████████████     0.847
+Admin Rights          ███████████████████████      0.840
+
+
+════════════════════════════════════════════════════════════════════
+
+
+9. KARŞILAŞTIRMALI ANALİZ
+════════════════════════════════════════════════════════════════════
+
+Neden 4 Farklı Model?
+
+1. Bilimsel Yaklaşım:
+   Farklı metodolojilerin karşılaştırmalı analizi
+
+2. Avantaj-Dezavantaj Analizi:
+   Her modelin güçlü/zayıf yönlerini belirleme
+
+3. Optimal Çözüm Seçimi:
+   İhtiyaca göre en uygun modeli belirleme
+
+
+Hangi Model Ne Zaman Kullanılmalı?
+
+Baseline:
+→ Hızlı prototip gerekiyorsa
+→ Hesaplama kaynağı kısıtlıysa
+→ Açıklanabilir model isteniyorsa
+
+LSTM:
+→ Bağlam önemliyse
+→ Orta düzey doğruluk yeterliyse
+→ GPU mevcut ama sınırlıysa
+
+Ensemble:
+→ En yüksek güvenilirlik isteniyorsa
+→ Kritik kararlar alınıyorsa
+→ Tahmin süresi çok önemli değilse
+
+BERT:
+→ En yüksek doğruluk şartsa
+→ GPU mevcut ve güçlüyse
+→ Model boyutu sorun değilse
+→ Production ortamında yüksek kaynak varsa
+
+
+════════════════════════════════════════════════════════════════════
+
+
+10. ZORLUKLAR VE ÇÖZÜMLER
+════════════════════════════════════════════════════════════════════
+
+Zorluk 1: Dengesiz Sınıf Dağılımı
+─────────────────────────────────
+Problem: Bazı kategorilerde çok veri var (Hardware: 13,617), 
+         bazılarında az (Admin Rights: 1,760)
+
+Çözüm:
+• Class weights kullanımı
+• Stratified split ile dengeli bölümleme
+• BERT'in robust yapısı sayesinde etki azaldı
+
+
+Zorluk 2: GPU Kaynak Yönetimi
+─────────────────────────────
+Problem: BERT eğitimi yüksek GPU memory gerektiriyor
+
+Çözüm:
+• Batch size optimizasyonu (16)
+• Gradient accumulation
+• Mixed precision training (opsiyonel)
+
+
+Zorluk 3: Overfitting Riski
+──────────────────────────
+Problem: Modellerin eğitim verisini ezberlemesi
+
+Çözüm:
+• Dropout layers (0.3)
+• Early stopping (patience: 3)
+• Validation set ile sürekli kontrol
+• Regularization techniques
+
+
+Zorluk 4: Model Deployment
+──────────────────────────
+Problem: 4 farklı modeli production'da sunmak
+
+Çözüm:
+• Flask REST API geliştirildi
+• Her model için ayrı endpoint
+• Docker containerization
+• Model versioning
+
+
+════════════════════════════════════════════════════════════════════
+
+
+11. ELDE EDİLEN ÇIKTILAR
+════════════════════════════════════════════════════════════════════
+
+Eğitilmiş Modeller:
+• baseline_tfidf_logreg.pkl (7.5 MB)
+• word2vec_lstm_model.h5 (13.4 MB)
+• word2vec_model.bin (14.7 MB)
+• bert_model.pt (440 MB)
+• Tokenizer ve encoder dosyaları
+
+Analiz Raporları:
+• Model comparison reports
+• Confusion matrix grafikleri
+• Per-class performance tables
+• Training history grafikleri
+
+API Servisi:
+• REST API (Flask)
+• 3 farklı model endpoint
+• Health check endpoint
+• JSON response format
+
+Dokümantasyon:
+• Teknik dokümantasyon
+• Kurulum rehberi
+• API kullanım kılavuzu
+• Model karşılaştırma raporları
+
+
+════════════════════════════════════════════════════════════════════
+
+
+12. SONUÇ VE DEĞERLENDİRME
+════════════════════════════════════════════════════════════════════
+
+Proje Başarıları:
+✓ 4 farklı makine öğrenmesi yaklaşımı uygulandı
+✓ %88.82 test accuracy elde edildi (hedef: %85+)
+✓ GPU ile optimize edilmiş eğitim
+✓ Production-ready sistem geliştirildi
+✓ Karşılaştırmalı model analizi yapıldı
+
+Öğrenilenler:
+• Klasik ML vs Derin Öğrenme farkları
+• Transfer learning'in gücü
+• Ensemble yöntemlerinin faydası
+• GPU programlamanın önemi
+• Production deployment süreçleri
+
+Gelecek İyileştirmeler:
+• Data augmentation ile %90+ accuracy hedefi
+• Cross-validation ile daha güvenilir metrikler
+• Hyperparameter tuning ile optimizasyon
+• Real-time monitoring ve A/B testing
+• Multi-language support (Türkçe adaptasyonu)
+
+
+════════════════════════════════════════════════════════════════════
+
+
+13. KAYNAKÇA
+════════════════════════════════════════════════════════════════════
+
+Akademik Referanslar:
+• Devlin et al. (2018): "BERT: Pre-training of Deep Bidirectional 
+  Transformers for Language Understanding"
+• Mikolov et al. (2013): "Efficient Estimation of Word 
+  Representations in Vector Space" (Word2Vec)
+• Hochreiter & Schmidhuber (1997): "Long Short-Term Memory"
+
+Teknik Kaynaklar:
+• Hugging Face Transformers Documentation
+• TensorFlow/Keras Official Documentation
+• Scikit-learn User Guide
+• PyTorch Tutorials
+
+Veri Seti:
+• IT Help Desk Ticket Dataset
+• 47,837 labeled support tickets
+• 8 categories, balanced distribution
+
+
+════════════════════════════════════════════════════════════════════
+
+
+TEŞEKKÜRLER!
+
+Sorularınız için hazırım.
+

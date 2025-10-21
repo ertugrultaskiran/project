@@ -1,0 +1,70 @@
+# Project Configuration File
+
+# Data paths
+data:
+  raw_data: "data/all_tickets_processed_improved_v3.xlsx"
+  cleaned_data: "data/cleaned_data.csv"
+  
+# Model parameters
+models:
+  baseline:
+    tfidf:
+      min_df: 3
+      max_df: 0.9
+      ngram_range: [1, 2]
+    logistic_regression:
+      max_iter: 200
+      n_jobs: -1
+      
+  word2vec:
+    vector_size: 200
+    window: 5
+    min_count: 2
+    workers: 4
+    sg: 1  # Skip-gram
+    epochs: 10
+    
+  lstm:
+    max_vocab: 40000
+    max_len: 80
+    embedding_dim: 200
+    lstm_units: 128
+    dropout_rate: 0.3
+    spatial_dropout: 0.2
+    batch_size: 64
+    epochs: 15
+    patience: 3
+    
+  bert:
+    model_name: "bert-base-uncased"
+    max_length: 128
+    batch_size: 16
+    epochs: 3
+    learning_rate: 2e-5
+    
+# Training parameters
+training:
+  test_size: 0.2
+  validation_size: 0.1
+  random_state: 42
+  stratify: true
+  
+# Evaluation
+evaluation:
+  metrics: ["accuracy", "precision", "recall", "f1-score"]
+  confusion_matrix: true
+  roc_curves: true
+  pr_curves: true
+  
+# API settings
+api:
+  host: "0.0.0.0"
+  port: 5000
+  debug: false
+  
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/training.log"
+

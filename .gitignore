@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Model files (çok büyük)
+models/*.h5
+models/*.bin
+models/*.pt
+models/bert_tokenizer/
+
+# Keep only config files
+!models/*.pkl
+
+# Data files (çok büyük)
+data/*.xlsx
+data/*.csv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+check_gpu.py
+
+# Reports (images are large)
+reports/*.png
