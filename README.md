@@ -30,32 +30,50 @@ Bu proje, gelen müşteri talepleri ve yazışmalarının konu başlıklarını 
 
 ```
 project/
-├── data/                     # Veri dosyaları
+├── 📁 data/                  # Veri dosyaları
 │   ├── all_tickets_processed_improved_v3.xlsx
 │   └── cleaned_data.csv
-├── models/                   # Kaydedilen modeller
+│
+├── 📁 models/                # Kaydedilen modeller
 │   ├── baseline_tfidf_logreg.pkl
 │   ├── word2vec_lstm_model.h5
-│   ├── word2vec_model.bin
+│   ├── bert_model.pt
 │   ├── tokenizer.pkl
 │   └── label_encoder.pkl
-├── reports/                  # Raporlar ve grafikler
-│   └── training_history.png
-├── src/                      # Kaynak kodlar
-│   ├── utils.py             # Yardımcı fonksiyonlar
-│   ├── 00_check_data.ipynb  # Veri kontrolü ve EDA
-│   ├── 01_baseline_tfidf_logreg.ipynb  # Baseline model
-│   ├── 02_word2vec_lstm.ipynb  # Word2Vec + LSTM modeli
-│   ├── 03_bert_transformer.ipynb  # BERT fine-tuning
-│   ├── 04_ensemble_model.py  # Ensemble modeli
-│   ├── 05_hyperparameter_tuning.py  # Hiperparametre optimizasyonu
-│   ├── 06_inference_api.py  # REST API
-│   ├── 07_model_evaluation.py  # Model değerlendirme
-│   ├── 08_quick_evaluation.ipynb  # Hızlı model karşılaştırma
-│   └── evaluate_current_models.py  # Detaylı model değerlendirme
-├── requirements.txt          # Gerekli Python paketleri
-└── README.md                # Bu dosya
+│
+├── 📁 reports/               # Grafikler ve sonuç raporları
+│   ├── model_comparison.png
+│   ├── training_history.png
+│   └── *.csv
+│
+├── 📁 src/                   # Kaynak kodlar
+│   ├── 00_check_data.ipynb
+│   ├── 01_baseline_tfidf_logreg.ipynb
+│   ├── 02_word2vec_lstm.ipynb
+│   ├── 03_bert_transformer.ipynb
+│   ├── 04_ensemble_model.py
+│   ├── 06_inference_api.py
+│   ├── 07_model_evaluation.py
+│   └── utils.py
+│
+├── 📁 scripts/               # Otomosyon scriptleri
+│   ├── train_all_models.sh
+│   └── start_api.sh
+│
+├── 📁 tests/                 # Test dosyaları
+│   └── test_models.py
+│
+├── 📁 docs/                  # Detaylı dokümantasyon
+│   └── README.md             # (Tüm teknik notlar)
+│
+├── 📄 README.md              # Bu dosya - Ana dokümantasyon
+├── 📄 requirements.txt       # Python bağımlılıkları
+├── 📄 config.yaml            # Konfigürasyon ayarları
+├── 📄 Dockerfile             # Docker deployment
+└── 📄 .gitignore             # Git ignore kuralları
 ```
+
+> **Not**: Detaylı kurulum notları, GPU kurulum rehberleri ve diğer teknik dokümantasyon `docs/` klasöründedir.
 
 ## 🚀 Kurulum
 

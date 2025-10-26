@@ -45,7 +45,14 @@ logs/
 
 # Temporary files
 *.tmp
+*.bat
 check_gpu.py
+cleanup_script.py
+pyrightconfig.json
 
 # Reports (images are large)
 reports/*.png
+
+# Documentation (keep only main README)
+docs/
+!docs/README.md
