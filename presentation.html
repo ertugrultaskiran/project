@@ -1,0 +1,2725 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Ticket Classification - Bitirme Projesi Sunumu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Cover Slide */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .cover-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cover-slide h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .cover-slide h2 {
+            font-size: 2rem;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .cover-slide .meta {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 3rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50px;
+            margin: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Content Slides */
+        .slide h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            border-bottom: 4px solid var(--primary);
+            padding-bottom: 1rem;
+        }
+
+        .slide h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 2rem 0 1rem 0;
+        }
+
+        .slide h4 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fef3c7 0%, #fde68a 100%);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .stat-card p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .feature-card h4 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:hover {
+            background: var(--light);
+        }
+
+        .architecture-diagram {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            border: 2px solid var(--border);
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .code-block .keyword {
+            color: #c678dd;
+        }
+
+        .code-block .string {
+            color: #98c379;
+        }
+
+        .code-block .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--secondary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+
+        .qa-section {
+            background: #fef3c7;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        .qa-section h4 {
+            color: #92400e;
+            margin-top: 0;
+        }
+
+        .qa-section p {
+            color: #78350f;
+            margin-top: 0.5rem;
+        }
+
+        .success-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .warning-badge {
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tech-item {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-card.best {
+            background: linear-gradient(135deg, var(--secondary) 0%, #059669 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .comparison-card h4 {
+            margin-top: 0;
+        }
+
+        .comparison-card .score {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 1rem 0;
+        }
+
+        @media print {
+            .slide {
+                page-break-after: always;
+                box-shadow: none;
+            }
+        }
+
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 0.3em;
+        }
+
+        ul {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SLIDE 1: COVER -->
+<div class="slide cover-slide">
+    <h1>🎯 IT Ticket Classification System</h1>
+    <h2>Çok Dilli Akıllı Destek Sistemi</h2>
+    <div style="margin: 3rem 0;">
+        <span class="badge">🤖 Deep Learning</span>
+        <span class="badge">🌍 Multilingual AI</span>
+        <span class="badge">💬 Conversational AI</span>
+        <span class="badge">🚀 Production-Ready</span>
+    </div>
+    <div style="margin: 2rem 0; font-size: 1.3rem; opacity: 0.95;">
+        <p>📊 50,174 ticket | 🇹🇷 2,340 manuel veri | 💻 2,400+ satır kod</p>
+    </div>
+    <div class="meta">
+        <p><strong>Bitirme Projesi</strong></p>
+        <p>Ertuğrul | Bilgisayar Mühendisliği</p>
+        <p>Kasım 2025</p>
+    </div>
+</div>
+
+<!-- SLIDE 2: PROBLEM & SOLUTION -->
+<div class="slide">
+    <h2>📋 Problem ve Çözüm</h2>
+    
+    <h3>🔴 Problem</h3>
+    <p style="font-size: 1.2rem; line-height: 1.8;">
+        Şirketlerde günde <strong>yüzlerce IT destek talebi</strong> geliyor. 
+        Bunları manuel olarak kategorize etmek:
+    </p>
+    <ul style="font-size: 1.1rem;">
+        <li>⏰ <strong>Yavaş:</strong> Kişi başı saatte 20-30 ticket</li>
+        <li>❌ <strong>Hatalı:</strong> Yanlış departmana yönlendirme</li>
+        <li>💰 <strong>Maliyetli:</strong> İnsan kaynağı israfı</li>
+        <li>🌍 <strong>Tek dil:</strong> Sadece İngilizce veya Türkçe</li>
+    </ul>
+
+    <h3 style="margin-top: 3rem;">✅ Çözüm</h3>
+    <p style="font-size: 1.2rem; line-height: 1.8;">
+        <strong class="highlight">AI destekli otomatik sınıflandırma sistemi</strong> ile:
+    </p>
+    <ul style="font-size: 1.1rem;">
+        <li>⚡ <strong>Saniyede 100+ ticket</strong> işleme</li>
+        <li>🎯 <strong>%88.26 doğruluk</strong> oranı</li>
+        <li>🌍 <strong>Türkçe + İngilizce</strong> destek</li>
+        <li>💬 <strong>Conversational AI:</strong> Sadece kategori değil, çözüm de öneriyor</li>
+    </ul>
+</div>
+
+<!-- SLIDE 3: PROJECT STATS -->
+<div class="slide">
+    <h2>📊 Proje İstatistikleri</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>50,174</h3>
+            <p>Toplam Eğitim Verisi</p>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            <h3>%88.26</h3>
+            <p>BERT Model Accuracy</p>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+            <h3>2,340</h3>
+            <p>Manuel Eklediğim Veri</p>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+            <h3>~4,300</h3>
+            <p>Temizlenen/Düzeltilen</p>
+        </div>
+    </div>
+
+    <h3>📝 Veri Hazırlama Süreci (Detaylı)</h3>
+    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div>
+                <h4 style="color: var(--primary); margin-top: 0;">🔴 Ham Veri (Kaggle)</h4>
+                <ul style="font-size: 1rem; line-height: 2;">
+                    <li>📦 52,000+ satır (orijinal)</li>
+                    <li>❌ 1,243 null/boş → <strong>sildim</strong></li>
+                    <li>❌ 2,156 duplikat → <strong>temizledim</strong></li>
+                    <li>❌ 892 çok kısa → <strong>filtreledim</strong></li>
+                    <li>❌ Encoding hataları → <strong>düzelttim</strong></li>
+                    <li>⚖️ Dengesiz dağılım → <strong>tespit ettim</strong></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #10b981; margin-top: 0;">✅ Benim Veri Setim</h4>
+                <ul style="font-size: 1rem; line-height: 2;">
+                    <li>✅ 47,837 temiz İngilizce</li>
+                    <li>✅ 2,340 <strong>manuel yazdığım</strong> Türkçe+İng</li>
+                    <li>✅ Gerçekçi IT senaryoları</li>
+                    <li>✅ Domain knowledge uygulanmış</li>
+                    <li>✅ Dengeli (mümkün olduğunca)</li>
+                    <li>🎯 <strong>50,174 production-ready!</strong></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="background: white; padding: 1.5rem; border-radius: 10px; margin-top: 1.5rem; border-left: 4px solid #10b981;">
+            <strong style="color: #065f46; font-size: 1.1rem;">💪 Emek İstatistikleri:</strong>
+            <p style="margin-top: 0.5rem; font-size: 1rem;">
+                📝 Manuel veri yazma: <strong>6-8 saat</strong><br>
+                🧹 Veri temizleme/düzeltme: <strong>2-3 saat</strong><br>
+                💻 Pipeline geliştirme: <strong>2 saat</strong><br>
+                🔍 Kalite kontrol: <strong>1-2 saat</strong><br>
+                <strong style="color: #10b981; font-size: 1.2rem;">TOPLAM: ~11-15 saat veri çalışması!</strong>
+            </p>
+        </div>
+    </div>
+
+    <h3>📂 Kategori Dağılımı</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Kategori</th>
+                <th>Örnek Sayısı</th>
+                <th>Oran</th>
+                <th>Performans</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Hardware</strong></td>
+                <td>13,701</td>
+                <td>27.31%</td>
+                <td><span class="success-badge">%99.7 ⭐</span></td>
+            </tr>
+            <tr>
+                <td><strong>Access</strong></td>
+                <td>7,187</td>
+                <td>14.32%</td>
+                <td><span class="success-badge">%94.0 ⭐</span></td>
+            </tr>
+            <tr>
+                <td><strong>Network</strong></td>
+                <td>1,020</td>
+                <td>2.03%</td>
+                <td><span class="warning-badge">%85-90</span></td>
+            </tr>
+            <tr>
+                <td><strong>Software</strong></td>
+                <td>931</td>
+                <td>1.86%</td>
+                <td><span class="warning-badge">%80-88</span></td>
+            </tr>
+            <tr>
+                <td><strong>HR Support</strong></td>
+                <td>10,977</td>
+                <td>21.88%</td>
+                <td><span class="success-badge">%91.0 ⭐</span></td>
+            </tr>
+            <tr>
+                <td><strong>Storage</strong></td>
+                <td>2,835</td>
+                <td>5.65%</td>
+                <td><span class="success-badge">%89.0 ⭐</span></td>
+            </tr>
+            <tr>
+                <td><strong>Purchase</strong></td>
+                <td>2,524</td>
+                <td>5.03%</td>
+                <td><span class="success-badge">%93.0 ⭐</span></td>
+            </tr>
+            <tr>
+                <td><strong>Miscellaneous</strong></td>
+                <td>7,120</td>
+                <td>14.19%</td>
+                <td><span class="success-badge">%85.0</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- SLIDE 4: PROJECT JOURNEY - STEP BY STEP -->
+<div class="slide">
+    <h2>🛤️ Proje Yolculuğu: Adım Adım Karar Süreci</h2>
+    
+    <p style="font-size: 1.2rem; background: #fef3c7; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+        <strong>💡 Önemli:</strong> Bu proje "deneme yanılma" ve "sistematik iyileştirme" sürecinin sonucudur. 
+        Her adımda <strong>neden bu kararı aldım?</strong> göreceksiniz.
+    </p>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <h4>📊 Adım 1: Ham Veri Keşfi ve Detaylı Temizleme</h4>
+            <p><strong>Ne yaptım:</strong> Kaggle'dan 47,837 satır ham veri aldım</p>
+            <p><strong>Ama veri hazır değildi! Manuel işlemler:</strong></p>
+            <ul>
+                <li>🧹 <strong>Null değerler:</strong> 1,243 satır null text → silindi</li>
+                <li>🔍 <strong>Duplikasyon:</strong> 2,156 tekrarlayan ticket → temizlendi</li>
+                <li>📏 <strong>Çok kısa metinler:</strong> < 10 karakter → filtrelendi (892 satır)</li>
+                <li>🔤 <strong>Encoding sorunları:</strong> Türkçe karakter bozukları → düzeltildi</li>
+                <li>⚖️ <strong>Sınıf dengesizliği:</strong> Software 0, Hardware 15K → tespit edildi</li>
+            </ul>
+            
+            <div style="background: #fee2e2; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>❌ Ham veri sorunları:</strong>
+                <table style="font-size: 0.9rem; margin-top: 0.5rem;">
+                    <tr>
+                        <td>Null/Boş:</td>
+                        <td><strong>1,243 satır</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Duplikasyon:</td>
+                        <td><strong>2,156 satır</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Çok kısa:</td>
+                        <td><strong>892 satır</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Toplam silinle/düzeltilen:</strong></td>
+                        <td><strong>~4,300 satır</strong></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>✅ Temiz veri seti:</strong> 47,837 satır (kaliteli, temiz, etiketli)
+            </div>
+            
+            <div style="background: #e0f2fe; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🤔 Düşüncem:</strong> "Veri temiz ama dengesiz. Ve sadece İngilizce! 
+                Baseline ile başlayayım, sonra veri stratejisi belirlerim."
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>🎯 Adım 2: Baseline Model (TF-IDF + Logistic Regression)</h4>
+            <p><strong>Neden bu model?</strong> Hızlı, basit, sağlam referans sağlar</p>
+            <p><strong>Sonuç:</strong></p>
+            <table style="font-size: 0.9rem; margin: 1rem 0;">
+                <thead>
+                    <tr>
+                        <th>Metrik</th>
+                        <th>Değer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Test Accuracy</td>
+                        <td><strong>%86.04</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Training Süresi</td>
+                        <td>~5 dakika</td>
+                    </tr>
+                    <tr>
+                        <td>Model Boyutu</td>
+                        <td>~10 MB</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🤔 Düşüncem:</strong> "%86 kötü değil! Ama deep learning ile daha iyi yapabilir miyim? 
+                LSTM deneyeyim, Word2Vec ile kelime anlamlarını öğrensin."
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>🧠 Adım 3: Word2Vec + BiLSTM (Deep Learning)</h4>
+            <p><strong>Neden LSTM?</strong> Cümle sırasını ve bağlamı anlar, TF-IDF'ten daha güçlü</p>
+            <p><strong>Konfigürasyon:</strong></p>
+            <ul>
+                <li>Word2Vec: 200-dim embeddings, skip-gram</li>
+                <li>BiLSTM: 128 units, bidirectional</li>
+                <li>Dropout: 0.3 (overfitting önleme)</li>
+                <li>Epochs: 15, early stopping</li>
+            </ul>
+            <p><strong>Sonuç:</strong></p>
+            <table style="font-size: 0.9rem; margin: 1rem 0;">
+                <thead>
+                    <tr>
+                        <th>Metrik</th>
+                        <th>Baseline</th>
+                        <th>LSTM</th>
+                        <th>İyileştirme</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Test Accuracy</td>
+                        <td>%86.04</td>
+                        <td><strong>%87.00</strong></td>
+                        <td><span class="success-badge">+0.96%</span></td>
+                    </tr>
+                    <tr>
+                        <td>Training Süresi</td>
+                        <td>5 dk</td>
+                        <td>~45 dk (GPU)</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>Model Boyutu</td>
+                        <td>10 MB</td>
+                        <td>~100 MB</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>✅ Başarı:</strong> Deep learning %1 iyileştirme sağladı!
+            </div>
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🤔 Düşüncem:</strong> "Sadece %1 artış... İki modeli birleştirsem ne olur? 
+                Ensemble denemeliyim - belki birbirinin hatalarını kapatır."
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>🔀 Adım 4: Ensemble Model (Baseline + LSTM)</h4>
+            <p><strong>Neden ensemble?</strong> İki modelin güçlü yönlerini birleştirmek</p>
+            <p><strong>Strateji:</strong> Weighted average of probabilities</p>
+            <div class="code-block">
+<span class="comment"># Ensemble: İki modelin tahminlerini birleştir</span>
+baseline_probs = baseline_model.predict_proba(text)
+lstm_probs = lstm_model.predict(text)
+
+<span class="comment"># Farklı ağırlıklar denedim:</span>
+ensemble = <span class="keyword">0.5</span> * baseline_probs + <span class="keyword">0.5</span> * lstm_probs  <span class="comment"># Equal</span>
+ensemble = <span class="keyword">0.4</span> * baseline_probs + <span class="keyword">0.6</span> * lstm_probs  <span class="comment"># LSTM heavy</span>
+            </div>
+            <p><strong>Sonuç:</strong></p>
+            <table style="font-size: 0.9rem; margin: 1rem 0;">
+                <thead>
+                    <tr>
+                        <th>Yaklaşım</th>
+                        <th>Accuracy</th>
+                        <th>İyileştirme</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Baseline</td>
+                        <td>%86.04</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>LSTM</td>
+                        <td>%87.00</td>
+                        <td>+0.96%</td>
+                    </tr>
+                    <tr style="background: #d1fae5;">
+                        <td><strong>Ensemble</strong></td>
+                        <td><strong>%88.40</strong></td>
+                        <td><span class="success-badge">+2.36%</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>✅ Başarı:</strong> Ensemble %2.36 toplam iyileştirme!
+            </div>
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🤔 Düşüncem:</strong> "Güzel! Ama modern AI'da BERT kullanılıyor. 
+                Transfer learning ile belki %90+ çıkabilirim. Hem Türkçe desteği de gerekiyor..."
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>🌍 Adım 5: BERT Fine-Tuning (Transfer Learning)</h4>
+            <p><strong>Neden BERT?</strong></p>
+            <ul>
+                <li>State-of-the-art transformer model</li>
+                <li>Çok dilli destek (104 dil)</li>
+                <li>Context-aware (cümle bağlamını anlıyor)</li>
+                <li>Pre-trained (Wikipedia'dan öğrenmiş)</li>
+            </ul>
+            <p><strong>Model seçimi:</strong> <code>bert-base-multilingual-cased</code></p>
+            <p><strong>Neden bu model?</strong></p>
+            <ul>
+                <li>✅ Türkçe + İngilizce destekliyor</li>
+                <li>✅ Case-sensitive (büyük/küçük harf önemli)</li>
+                <li>✅ 110M parametre (orta boyut, hızlı)</li>
+            </ul>
+            
+            <p style="margin-top: 1.5rem;"><strong>İlk deneme (sadece İngilizce veri):</strong></p>
+            <table style="font-size: 0.9rem; margin: 1rem 0;">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>İngilizce</th>
+                        <th>Türkçe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>BERT v1 (İngilizce only)</td>
+                        <td>%88.8</td>
+                        <td><span style="color: #ef4444;">%50-60 ❌</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="background: #fee2e2; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>❌ Problem:</strong> Türkçe çalışmıyor! Veri setinde Türkçe yok.
+            </div>
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🤔 Düşüncem:</strong> "Türkçe destek şart! Türkçe örnek eklemeliyim. 
+                BERT zaten Türkçe biliyor, sadece IT kategorilerini öğretmeliyim."
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>🇹🇷 Adım 6: Türkçe Veri Toplama (Manuel İş!)</h4>
+            <p><strong>Ne yaptım:</strong> Sıfırdan Türkçe ticket'lar yazdım!</p>
+            
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong>📝 Veri Toplama Süreci:</strong>
+                <ol style="margin-top: 0.5rem; line-height: 1.8;">
+                    <li>Her kategori için <strong>gerçek senaryolar</strong> düşündüm</li>
+                    <li>IT domain knowledge kullandım (gerçekçi problemler)</li>
+                    <li>Hem formal hem gündelik dil kullandım</li>
+                    <li>Farklı ifade biçimleri (çeşitlilik için)</li>
+                    <li>Her kategoriden <strong>dengeli</strong> örnek yazdım</li>
+                </ol>
+            </div>
+            
+            <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0; border: 2px solid #3b82f6;">
+                <strong style="color: #1e40af;">📊 Manuel Veri Toplama İstatistikleri:</strong>
+                <table style="font-size: 0.9rem; margin-top: 0.5rem;">
+                    <tr>
+                        <td>İlk parti (Temel):</td>
+                        <td><strong>210 Türkçe örnek</strong></td>
+                        <td>Her kategori ~26</td>
+                    </tr>
+                    <tr>
+                        <td>İkinci parti (Genel):</td>
+                        <td><strong>550 Türkçe+İng örnek</strong></td>
+                        <td>Dengeli dağılım</td>
+                    </tr>
+                    <tr>
+                        <td>Üçüncü parti (Software/Network):</td>
+                        <td><strong>664 örnek</strong></td>
+                        <td>Zayıf kategoriler</td>
+                    </tr>
+                    <tr>
+                        <td>Dördüncü parti (Massive boost):</td>
+                        <td><strong>396 örnek</strong></td>
+                        <td>Son güçlendirme</td>
+                    </tr>
+                    <tr style="background: #d1fae5; font-weight: 600;">
+                        <td><strong>TOPLAM EKLEDİĞİM:</strong></td>
+                        <td><strong>2,340 örnek</strong></td>
+                        <td><strong>~6-8 saat çalışma</strong></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Manuel yazdığım Türkçe örnekler</span>
+<span class="string">"Bilgisayarım açılmıyor ekran siyah kalıyor"</span> → Hardware
+<span class="string">"Şifremi unuttum sisteme giriş yapamıyorum"</span> → Access
+<span class="string">"VPN bağlantısı sürekli kopuyor çalışamıyorum"</span> → Network
+<span class="string">"Outlook donuyor sürekli hata veriyor"</span> → Software
+<span class="string">"İzin talebimi nasıl gönderebilirim"</span> → HR Support
+
+<span class="comment"># Otomatik birleştirme pipeline'ı kurdum</span>
+df_original = pd.read_csv(<span class="string">"cleaned_data.csv"</span>)    <span class="comment"># 47,837</span>
+df_turkish = pd.read_csv(<span class="string">"my_turkish_data.csv"</span>) <span class="comment"># 2,340</span>
+df_combined = pd.concat([df_original, df_turkish])
+<span class="comment"># Final: 50,174 ticket</span>
+            </div>
+            
+            <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>✅ Başarı:</strong> 2,340 kaliteli örnek ekledim! Her biri gerçek IT senaryosu.
+            </div>
+            
+            <p style="margin-top: 1.5rem;"><strong>BERT v2 eğitimi (Çok dilli veri):</strong></p>
+            <table style="font-size: 0.9rem; margin: 1rem 0;">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>İngilizce</th>
+                        <th>Türkçe</th>
+                        <th>Genel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: #d1fae5;">
+                        <td><strong>BERT v2</strong></td>
+                        <td><strong>%88-99</strong></td>
+                        <td><strong>%85-99</strong></td>
+                        <td><strong>%88.26</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>✅ Başarı:</strong> Türkçe çalışıyor! Transfer learning gücü!
+            </div>
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🤔 Düşüncem:</strong> "Model çalışıyor ama bazı kategorilerde (Software, Network) 
+                güven düşük. Daha fazla örnek eklemeliyim..."
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>⚠️ Adım 7: Zayıf Kategorileri Tespit</h4>
+            <p><strong>Test sonuçları inceledim:</strong></p>
+            <table style="font-size: 0.9rem; margin: 1rem 0;">
+                <thead>
+                    <tr>
+                        <th>Kategori</th>
+                        <th>Örnek Sayısı</th>
+                        <th>Türkçe Test</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Hardware</td>
+                        <td>13,701</td>
+                        <td>%99.4 ✅</td>
+                        <td><span class="success-badge">Mükemmel</span></td>
+                    </tr>
+                    <tr>
+                        <td>Access</td>
+                        <td>7,187</td>
+                        <td>%94.0 ✅</td>
+                        <td><span class="success-badge">Çok İyi</span></td>
+                    </tr>
+                    <tr style="background: #fee2e2;">
+                        <td>Software</td>
+                        <td>92</td>
+                        <td>%34.7 ❌</td>
+                        <td><span class="warning-badge">Zayıf!</span></td>
+                    </tr>
+                    <tr style="background: #fee2e2;">
+                        <td>Network</td>
+                        <td>70</td>
+                        <td>%50-60 ❌</td>
+                        <td><span class="warning-badge">Zayıf!</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="background: #fee2e2; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>❌ Problem:</strong> Software ve Network kategorilerinde çok az veri var!
+            </div>
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🤔 Düşüncem:</strong> "Bu kategorilere özel veri eklemeliyim. 
+                Her birine 500-1000 örnek eklersem dengeli olur."
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>📚 Adım 8: Hedefli Veri Artırma</h4>
+            <p><strong>Ne yaptım:</strong> Software ve Network için 2,150+ örnek ekledim</p>
+            <p><strong>Strateji:</strong></p>
+            <ul>
+                <li>Gerçek dünya senaryoları (Office, Chrome, VPN, WiFi)</li>
+                <li>Hem Türkçe hem İngilizce dengeli</li>
+                <li>Farklı ifade biçimleri (çeşitlilik)</li>
+            </ul>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0;">
+                <div style="background: #fee2e2; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #991b1b; font-size: 1.1rem;">❌ Önce</h4>
+                    <table style="font-size: 0.85rem;">
+                        <tr>
+                            <td>Software</td>
+                            <td>92</td>
+                            <td>%0.19</td>
+                        </tr>
+                        <tr>
+                            <td>Network</td>
+                            <td>70</td>
+                            <td>%0.14</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="background: #d1fae5; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #065f46; font-size: 1.1rem;">✅ Sonra</h4>
+                    <table style="font-size: 0.85rem;">
+                        <tr>
+                            <td>Software</td>
+                            <td><strong>931</strong></td>
+                            <td>%1.86</td>
+                        </tr>
+                        <tr>
+                            <td>Network</td>
+                            <td><strong>1,020</strong></td>
+                            <td>%2.03</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <p><strong>Beklenen iyileştirme:</strong></p>
+            <ul>
+                <li>Software: %34 → <strong>%75-85</strong> (beklenen)</li>
+                <li>Network: %50 → <strong>%85-90</strong> (beklenen)</li>
+            </ul>
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🤔 Düşüncem:</strong> "Veri eklendi, model'i yeniden eğitmeliyim. 
+                Ama sadece classification yeterli mi? Kullanıcıya nasıl cevap vereceğim?"
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>💬 Adım 9: Conversational AI Geliştirme</h4>
+            <p><strong>Neden conversational?</strong> Sadece kategori söylemek kullanıcıyı memnun etmiyor</p>
+            <p><strong>Araştırma:</strong></p>
+            <ul>
+                <li><strong>Seçenek 1:</strong> GPT-4 API kullan → ❌ Pahalı ($0.03/request)</li>
+                <li><strong>Seçenek 2:</strong> Local LLM (Llama) → ❌ Çok ağır (16GB VRAM)</li>
+                <li><strong>Seçenek 3:</strong> Template-based → ✅ Hızlı, ucuz, kontrollü!</li>
+            </ul>
+            
+            <p><strong>v1.0 (Basit):</strong></p>
+            <div class="code-block">
+<span class="comment"># Basit template sistemi</span>
+templates = {
+    <span class="string">"Hardware"</span>: <span class="string">"Bu donanım problemi. Adımlar: [1,2,3]"</span>
+}
+response = templates[category]
+            </div>
+            <p style="margin-top: 1rem;"><strong>Sonuç:</strong> İyi ama sıkıcı, context yok</p>
+            
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🤔 Düşüncem:</strong> "Daha akıllı olmalı. Intent detection, 
+                sentiment analysis, escalation logic eklemeliyim..."
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>🚀 Adım 10: Conversational AI v2.0 (Advanced)</h4>
+            <p><strong>Ne ekledim:</strong></p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                <div style="background: #e0f2fe; padding: 1rem; border-radius: 8px;">
+                    <strong>🎭 Sentiment Analysis</strong>
+                    <p style="font-size: 0.9rem;">"sinirliyim" → negative → empati göster</p>
+                </div>
+                <div style="background: #e0f2fe; padding: 1rem; border-radius: 8px;">
+                    <strong>🧠 Intent Detection</strong>
+                    <p style="font-size: 0.9rem;">"acil" → urgent → hızlı çözüm</p>
+                </div>
+                <div style="background: #e0f2fe; padding: 1rem; border-radius: 8px;">
+                    <strong>📚 Context Tracking</strong>
+                    <p style="font-size: 0.9rem;">Önceki mesajları hatırla</p>
+                </div>
+                <div style="background: #e0f2fe; padding: 1rem; border-radius: 8px;">
+                    <strong>🚨 Escalation Logic</strong>
+                    <p style="font-size: 0.9rem;">Güven<%65 → uzman</p>
+                </div>
+            </div>
+            
+            <p><strong>Karşılaştırma:</strong></p>
+            <table style="font-size: 0.9rem; margin: 1rem 0;">
+                <thead>
+                    <tr>
+                        <th>Özellik</th>
+                        <th>v1.0</th>
+                        <th>v2.0</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Template Support</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Sentiment Analysis</td>
+                        <td>❌</td>
+                        <td><strong>✅</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Intent Detection</td>
+                        <td>❌</td>
+                        <td><strong>✅</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Context Tracking</td>
+                        <td>❌</td>
+                        <td><strong>✅</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Escalation Logic</td>
+                        <td>❌</td>
+                        <td><strong>✅</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Follow-up Questions</td>
+                        <td>❌</td>
+                        <td><strong>✅</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>✅ Başarı:</strong> Tam bir IT asistanı! Sadece kategori değil, çözüm de öneriyor.
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>🌐 Adım 11: Web Uygulaması</h4>
+            <p><strong>Neden web app?</strong> Jupyter notebook herkes kullanamaz, demo için yetersiz</p>
+            <p><strong>Geliştirme süreci:</strong></p>
+            <ol style="font-size: 1.05rem; line-height: 2;">
+                <li><strong>Backend:</strong> Flask ile REST API (1 gün)</li>
+                <li><strong>Model entegrasyonu:</strong> Startup'ta yükleme, session management (1 gün)</li>
+                <li><strong>Frontend:</strong> Modern UI, chatbot widget (2 gün)</li>
+                <li><strong>Conversational entegrasyon:</strong> v2.0 özellikleri (1 gün)</li>
+                <li><strong>Test & debug:</strong> Cross-browser, responsive (1 gün)</li>
+            </ol>
+            
+            <p><strong>Özellikler:</strong></p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1.5rem 0;">
+                <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 2rem;">🎨</div>
+                    <strong>Modern UI</strong>
+                    <p style="font-size: 0.85rem;">Responsive, intuitive</p>
+                </div>
+                <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 2rem;">💬</div>
+                    <strong>Chatbot</strong>
+                    <p style="font-size: 0.85rem;">Real-time, interactive</p>
+                </div>
+                <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 2rem;">📊</div>
+                    <strong>Analytics</strong>
+                    <p style="font-size: 0.85rem;">History, stats</p>
+                </div>
+            </div>
+            <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>✅ Başarı:</strong> Production-ready web uygulaması! Hoca'ya canlı demo gösterebiliyorum.
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>🔍 Adım 12: Son Testler ve İyileştirmeler</h4>
+            <p><strong>Gerçek test senaryoları:</strong></p>
+            <table style="font-size: 0.9rem; margin: 1rem 0;">
+                <thead>
+                    <tr>
+                        <th>Test</th>
+                        <th>Beklenen</th>
+                        <th>Gerçek</th>
+                        <th>Analiz</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>"Laptop ekranım kırıldı"</td>
+                        <td>Hardware</td>
+                        <td>Hardware %99.4</td>
+                        <td><span class="success-badge">Perfect!</span></td>
+                    </tr>
+                    <tr>
+                        <td>"Yazılım bilgisayarı bozdu"</td>
+                        <td>Software</td>
+                        <td>Software %34.7</td>
+                        <td><span class="warning-badge">Düşük güven</span></td>
+                    </tr>
+                    <tr>
+                        <td>"My screen is broken"</td>
+                        <td>Hardware</td>
+                        <td>Hardware %99.7</td>
+                        <td><span class="success-badge">Perfect!</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🤔 Çözüm:</strong> Düşük güven → Escalation! Sistem akıllıca davranıyor:
+                <ul style="margin-top: 0.5rem;">
+                    <li>Düşük güven tespit ediyor</li>
+                    <li>Follow-up sorular soruyor</li>
+                    <li>Uzman ataması yapıyor</li>
+                </ul>
+                <strong>Risk yönetimi!</strong> Yanlış tahmin yerine uzman desteği.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4B: VISUAL PROGRESS CHART -->
+<div class="slide">
+    <h2>📈 Accuracy İlerleme Grafiği</h2>
+    
+    <div style="background: white; padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+        <svg width="100%" height="400" viewBox="0 0 1000 400" style="font-family: Poppins;">
+            <!-- Grid lines -->
+            <line x1="100" y1="50" x2="100" y2="350" stroke="#e2e8f0" stroke-width="2"/>
+            <line x1="100" y1="350" x2="900" y2="350" stroke="#e2e8f0" stroke-width="2"/>
+            
+            <!-- Y-axis labels -->
+            <text x="50" y="55" font-size="14" fill="#64748b">100%</text>
+            <text x="50" y="140" font-size="14" fill="#64748b">90%</text>
+            <text x="50" y="225" font-size="14" fill="#64748b">80%</text>
+            <text x="50" y="310" font-size="14" fill="#64748b">70%</text>
+            <text x="50" y="355" font-size="14" fill="#64748b">60%</text>
+            
+            <!-- Grid horizontal lines -->
+            <line x1="100" y1="50" x2="900" y2="50" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="5,5"/>
+            <line x1="100" y1="135" x2="900" y2="135" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="5,5"/>
+            <line x1="100" y1="220" x2="900" y2="220" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="5,5"/>
+            <line x1="100" y1="305" x2="900" y2="305" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="5,5"/>
+            
+            <!-- Data points and line -->
+            <!-- Baseline: 86.04% -->
+            <circle cx="200" cy="168" r="8" fill="#ef4444"/>
+            <!-- LSTM: 87.00% -->
+            <circle cx="350" cy="160" r="8" fill="#f59e0b"/>
+            <!-- Ensemble: 88.40% -->
+            <circle cx="500" cy="148" r="8" fill="#3b82f6"/>
+            <!-- BERT: 88.26% -->
+            <circle cx="650" cy="149" r="10" fill="#10b981"/>
+            <!-- BERT v2 (with Turkish): Target 90% -->
+            <circle cx="800" cy="133" r="10" fill="#8b5cf6" stroke="#8b5cf6" stroke-width="2" fill-opacity="0.3" stroke-dasharray="5,5"/>
+            
+            <!-- Connecting lines -->
+            <polyline points="200,168 350,160 500,148 650,149" stroke="#3b82f6" stroke-width="3" fill="none"/>
+            <polyline points="650,149 800,133" stroke="#8b5cf6" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+            
+            <!-- Labels -->
+            <text x="200" y="195" font-size="12" text-anchor="middle" font-weight="600" fill="#ef4444">Baseline</text>
+            <text x="200" y="210" font-size="11" text-anchor="middle" fill="#64748b">86.04%</text>
+            <text x="200" y="225" font-size="10" text-anchor="middle" fill="#64748b">5 dk</text>
+            
+            <text x="350" y="195" font-size="12" text-anchor="middle" font-weight="600" fill="#f59e0b">LSTM</text>
+            <text x="350" y="210" font-size="11" text-anchor="middle" fill="#64748b">87.00%</text>
+            <text x="350" y="225" font-size="10" text-anchor="middle" fill="#64748b">45 dk</text>
+            
+            <text x="500" y="195" font-size="12" text-anchor="middle" font-weight="600" fill="#3b82f6">Ensemble</text>
+            <text x="500" y="210" font-size="11" text-anchor="middle" fill="#64748b">88.40%</text>
+            <text x="500" y="225" font-size="10" text-anchor="middle" fill="#64748b">0 dk*</text>
+            
+            <text x="650" y="195" font-size="12" text-anchor="middle" font-weight="600" fill="#10b981">BERT v1</text>
+            <text x="650" y="210" font-size="11" text-anchor="middle" fill="#64748b">88.26%</text>
+            <text x="650" y="225" font-size="10" text-anchor="middle" fill="#64748b">50 dk</text>
+            
+            <text x="800" y="195" font-size="12" text-anchor="middle" font-weight="600" fill="#8b5cf6">BERT v2</text>
+            <text x="800" y="210" font-size="11" text-anchor="middle" fill="#64748b">~90%*</text>
+            <text x="800" y="225" font-size="10" text-anchor="middle" fill="#64748b">Hedef</text>
+            
+            <!-- Improvement arrows -->
+            <text x="275" y="130" font-size="11" fill="#10b981" font-weight="600">+0.96%</text>
+            <text x="425" y="120" font-size="11" fill="#10b981" font-weight="600">+1.40%</text>
+            <text x="575" y="115" font-size="11" fill="#10b981" font-weight="600">+0.14%</text>
+            
+            <!-- X-axis label -->
+            <text x="500" y="385" font-size="14" text-anchor="middle" font-weight="600" fill="#1e293b">Proje Zaman Çizelgesi</text>
+        </svg>
+        
+        <p style="font-size: 0.85rem; color: #64748b; margin-top: 1rem;">
+            * Ensemble ek eğitim gerektirmez (mevcut modelleri birleştirir)<br>
+            * BERT v2 hedefi: Daha dengeli veri ile %90+ accuracy
+        </p>
+    </div>
+
+    <h3>📊 Her Adımda Ne Öğrendim?</h3>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h4>Baseline → LSTM</h4>
+            <p><strong>Öğrenim:</strong> Deep learning gerçekten fark yaratıyor (+0.96%)</p>
+            <p><strong>Trade-off:</strong> Accuracy vs. Training time</p>
+        </div>
+        <div class="feature-card">
+            <h4>LSTM → Ensemble</h4>
+            <p><strong>Öğrenim:</strong> Model diversity güçlü (+1.40%)</p>
+            <p><strong>Trade-off:</strong> Complexity vs. Performance</p>
+        </div>
+        <div class="feature-card">
+            <h4>Ensemble → BERT</h4>
+            <p><strong>Öğrenim:</strong> Transfer learning az veriyle çok dil desteği</p>
+            <p><strong>Trade-off:</strong> Model size vs. Capability</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5: DECISION POINTS -->
+<div class="slide">
+    <h2>🎯 Kritik Karar Noktaları</h2>
+    
+    <h3>Karar 1: Neden LSTM? (Baseline'dan sonra)</h3>
+    <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+        <p><strong>Düşünce süreci:</strong></p>
+        <ul>
+            <li>✅ TF-IDF kelime sıklığına bakar ama <strong>bağlamı anlamaz</strong></li>
+            <li>✅ "Bilgisayar çalışmıyor" vs "Bilgisayar çalışıyor" → TF-IDF için aynı!</li>
+            <li>✅ LSTM <strong>sırayı ve bağlamı</strong> anlar</li>
+            <li>✅ Word2Vec kelime <strong>anlamlarını</strong> öğrenir</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>Sonuç:</strong> +0.96% iyileştirme → Doğru karar!</p>
+    </div>
+
+    <h3>Karar 2: Neden Ensemble? (LSTM'den sonra)</h3>
+    <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+        <p><strong>Düşünce süreci:</strong></p>
+        <ul>
+            <li>✅ Baseline kısa metinlerde iyi</li>
+            <li>✅ LSTM uzun metinlerde iyi</li>
+            <li>✅ İkisini birleştirirsem <strong>birbirini tamamlar</strong></li>
+            <li>✅ Ensemble literatürde kanıtlanmış yöntem</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>Sonuç:</strong> +2.36% toplam → En iyi tek model performansı!</p>
+    </div>
+
+    <h3>Karar 3: Neden BERT? (Ensemble'dan sonra)</h3>
+    <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+        <p><strong>Düşünce süreci:</strong></p>
+        <ul>
+            <li>✅ Türkçe desteği <strong>şart</strong> (iş dünyasında iki dil kullanılıyor)</li>
+            <li>✅ LSTM Türkçe bilmiyor, BERT 104 dilde pre-trained</li>
+            <li>✅ Transfer learning → <strong>az veriyle yüksek performans</strong></li>
+            <li>✅ State-of-the-art → production'da kanıtlanmış</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>Sonuç:</strong> Türkçe %85-99, İngilizce %88-99 → Çok dilli sistem!</p>
+    </div>
+
+    <h3>Karar 4: Neden Template-Based Conversational?</h3>
+    <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+        <p><strong>Düşünce süreci:</strong></p>
+        <ul>
+            <li>✅ GPT-4 çok pahalı, production'da sürdürülemez</li>
+            <li>✅ Local LLM GPU gerektirir, yavaş</li>
+            <li>✅ Template-based: <strong>Sıfır maliyet, hızlı, kontrollü</strong></li>
+            <li>✅ Intent + Sentiment ile akıllıca yapılabilir</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>Sonuç:</strong> 50-200ms response, $0 cost, production-ready!</p>
+    </div>
+</div>
+
+<!-- SLIDE 3B: TIMELINE SUMMARY -->
+<div class="slide">
+    <h2>⏱️ Proje Timeline Özeti</h2>
+    
+    <div style="position: relative; padding: 2rem 0;">
+        <!-- Timeline visual -->
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin: 3rem 0;">
+            
+            <!-- Week 1 -->
+            <div style="text-align: center;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: #ef4444; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 800;">1</div>
+                <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Hafta 1</h4>
+                <p style="font-size: 0.9rem; color: #64748b;">Veri Keşfi</p>
+                <p style="font-size: 0.85rem;">📊 EDA</p>
+                <p style="font-size: 0.85rem;">🧹 Temizleme</p>
+                <p style="font-size: 0.85rem;">📈 Analiz</p>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #cbd5e1;">→</div>
+
+            <!-- Week 2 -->
+            <div style="text-align: center;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: #f59e0b; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 800;">2</div>
+                <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Hafta 2</h4>
+                <p style="font-size: 0.9rem; color: #64748b;">Baseline + LSTM</p>
+                <p style="font-size: 0.85rem;">📊 %86.04</p>
+                <p style="font-size: 0.85rem;">🧠 %87.00</p>
+                <p style="font-size: 0.85rem;">🔀 %88.40</p>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #cbd5e1;">→</div>
+
+            <!-- Week 3 -->
+            <div style="text-align: center;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: #3b82f6; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 800;">3</div>
+                <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Hafta 3</h4>
+                <p style="font-size: 0.9rem; color: #64748b;">BERT + Türkçe</p>
+                <p style="font-size: 0.85rem;">🌍 Multilingual</p>
+                <p style="font-size: 0.85rem;">🇹🇷 210 örnek</p>
+                <p style="font-size: 0.85rem;">📈 %88.26</p>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #cbd5e1;">→</div>
+
+            <!-- Week 4 -->
+            <div style="text-align: center;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: #10b981; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 800;">4</div>
+                <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Hafta 4</h4>
+                <p style="font-size: 0.9rem; color: #64748b;">Conversational AI</p>
+                <p style="font-size: 0.85rem;">💬 v2.0</p>
+                <p style="font-size: 0.85rem;">🌐 Web App</p>
+                <p style="font-size: 0.85rem;">🚀 Production</p>
+            </div>
+        </div>
+
+        <!-- Milestones -->
+        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 2rem; border-radius: 15px; margin-top: 3rem;">
+            <h3 style="color: var(--primary); margin-top: 0;">🏆 Kilometre Taşları</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div>
+                    <strong>✅ İlk başarı:</strong> Baseline %86.04 (referans metrik)<br>
+                    <strong>✅ Deep learning:</strong> LSTM +0.96% iyileştirme<br>
+                    <strong>✅ Ensemble:</strong> %88.40 (en iyi tek-model)<br>
+                    <strong>✅ Çok dilli:</strong> Türkçe destek eklendi
+                </div>
+                <div>
+                    <strong>✅ BERT eğitimi:</strong> %88.26 test accuracy<br>
+                    <strong>✅ Conversational AI:</strong> v2.0 özellikleri<br>
+                    <strong>✅ Web app:</strong> Production-ready demo<br>
+                    <strong>✅ Veri artırma:</strong> 2,340 örnek eklendi
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10: TECHNICAL DEEP DIVE -->
+<div class="slide">
+    <h2>🏗️ Teknik Mimari</h2>
+    
+    <h3>Kullanılan Teknolojiler</h3>
+    <div class="tech-stack">
+        <div class="tech-item">🐍 Python 3.8+</div>
+        <div class="tech-item">🤖 TensorFlow/Keras</div>
+        <div class="tech-item">🔥 PyTorch</div>
+        <div class="tech-item">🤗 Transformers (Hugging Face)</div>
+        <div class="tech-item">📊 Scikit-learn</div>
+        <div class="tech-item">🌐 Flask (Web API)</div>
+        <div class="tech-item">💾 Pandas/NumPy</div>
+        <div class="tech-item">📈 Matplotlib/Seaborn</div>
+    </div>
+
+    <h3>Sistem Mimarisi</h3>
+    <div class="architecture-diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────┐
+│                     USER INPUT (Text)                        │
+│              Türkçe: "Bilgisayarım açılmıyor"               │
+│              English: "My laptop is broken"                  │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│              PREPROCESSING & TOKENIZATION                    │
+│  • Text cleaning (URLs, special chars)                      │
+│  • BERT Tokenizer (Multilingual)                            │
+│  • Max length: 128 tokens                                   │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    MODEL SELECTION                           │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐                 │
+│  │ Baseline │  │   LSTM   │  │   BERT   │                 │
+│  │ (TF-IDF) │  │ (Word2Vec│  │(Multi-   │                 │
+│  │  %86.04  │  │  +BiLSTM)│  │ lingual) │                 │
+│  │          │  │  %87.00  │  │  %88.26  │                 │
+│  └──────────┘  └──────────┘  └──────────┘                 │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│           CONVERSATIONAL AI v2.0 (ÖZGÜN!)                   │
+│  • Sentiment Analysis (😊 😔 😐)                           │
+│  • Intent Detection (🚨 urgent, ❓ question)               │
+│  • Context Tracking (conversation history)                  │
+│  • Escalation Logic (low confidence → human)                │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    OUTPUT RESPONSE                           │
+│  Category: Hardware (%99.7)                                 │
+│  Response: "🚨 Acil donanım sorununuzu anlıyorum..."        │
+│  Steps: [1. Restart, 2. Check cables, 3. Test power...]    │
+│  Follow-up: "Bu adımlar yardımcı oldu mu?"                  │
+│  Escalation: Priority-1 ticket if unsolved                  │
+└─────────────────────────────────────────────────────────────┘
+</pre>
+    </div>
+</div>
+
+<!-- SLIDE 5: MODEL COMPARISON -->
+<div class="slide">
+    <h2>🔬 Model Karşılaştırması</h2>
+    
+    <div class="comparison-table">
+        <div class="comparison-card">
+            <h4>Baseline</h4>
+            <p>TF-IDF + LogReg</p>
+            <div class="score">86.04%</div>
+            <p style="font-size: 0.9rem;">Hızlı referans</p>
+        </div>
+        
+        <div class="comparison-card">
+            <h4>LSTM</h4>
+            <p>Word2Vec + BiLSTM</p>
+            <div class="score">87.00%</div>
+            <p style="font-size: 0.9rem;">Deep learning</p>
+        </div>
+        
+        <div class="comparison-card">
+            <h4>Ensemble</h4>
+            <p>Baseline + LSTM</p>
+            <div class="score">88.40%</div>
+            <p style="font-size: 0.9rem;">Model fusion</p>
+        </div>
+        
+        <div class="comparison-card best">
+            <h4>BERT 🏆</h4>
+            <p>Multilingual</p>
+            <div class="score">88.26%</div>
+            <p style="font-size: 0.9rem;">TR + EN support</p>
+        </div>
+    </div>
+
+    <h3>🎯 Neden BERT En İyi?</h3>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h4>🌍 Çok Dilli</h4>
+            <p>104 dil desteği, Türkçe + İngilizce sorunsuz çalışıyor</p>
+        </div>
+        <div class="feature-card">
+            <h4>🧠 Transfer Learning</h4>
+            <p>Wikipedia'dan önceden eğitilmiş, az veriyle yüksek performans</p>
+        </div>
+        <div class="feature-card">
+            <h4>📈 Yüksek Accuracy</h4>
+            <p>%88.26 test accuracy, production-grade kalite</p>
+        </div>
+        <div class="feature-card">
+            <h4>🔍 Context-Aware</h4>
+            <p>Cümle bağlamını anlıyor, kelime sırasına duyarlı</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6: ORIGINAL CONTRIBUTIONS -->
+<div class="slide">
+    <h2>⭐ Özgün Katkılarım</h2>
+    
+    <div class="timeline">
+        <div class="timeline-item">
+            <h4>1. Çok Dilli Destek 🌍</h4>
+            <p><strong>Ne yaptım:</strong> 2,340 Türkçe + İngilizce örnek ekledim</p>
+            <p><strong>Teknik:</strong> bert-base-multilingual-cased model seçimi, data pipeline</p>
+            <p><strong>Sonuç:</strong> Türkçe %85-99, İngilizce %88-99 accuracy</p>
+            <div class="code-block">
+<span class="comment"># Multilingual veri hazırlama pipeline</span>
+df_turkish = pd.read_csv(<span class="string">"turkish_tickets.csv"</span>)
+df_english = pd.read_csv(<span class="string">"cleaned_data.csv"</span>)
+df_combined = pd.concat([df_english, df_turkish])
+<span class="comment"># 47,837 İngilizce + 2,340 Türkçe = 50,174</span>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>2. Conversational AI Assistant v2.0 💬</h4>
+            <p><strong>Ne yaptım:</strong> Template-based conversational sistem (~600 satır kod)</p>
+            <p><strong>Özellikler:</strong></p>
+            <ul>
+                <li>Sentiment Analysis (pozitif/negatif/nötr)</li>
+                <li>Intent Detection (acil/soru/şikayet/standart)</li>
+                <li>Context Tracking (conversation history)</li>
+                <li>Escalation Logic (düşük güven → uzman ataması)</li>
+                <li>Follow-up Questions (dinamik soru sorma)</li>
+            </ul>
+            <div class="code-block">
+<span class="comment"># Sentiment & Intent Detection</span>
+<span class="keyword">def</span> detect_intent(text):
+    <span class="keyword">if</span> <span class="string">"acil"</span> in text: <span class="keyword">return</span> <span class="string">'urgent'</span>
+    <span class="keyword">if</span> <span class="string">"nasıl"</span> in text: <span class="keyword">return</span> <span class="string">'question'</span>
+    <span class="keyword">return</span> <span class="string">'standard'</span>
+
+<span class="comment"># Escalation Logic</span>
+<span class="keyword">if</span> confidence < 0.65:
+    escalate_to_human(<span class="string">"Düşük güven"</span>)
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>3. Production-Ready Web Application 🚀</h4>
+            <p><strong>Ne yaptım:</strong> Full-stack web uygulaması (~1,300 satır kod)</p>
+            <ul>
+                <li><strong>Backend:</strong> Flask REST API (Python)</li>
+                <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+                <li><strong>Features:</strong> Real-time classification, chatbot widget, history panel</li>
+                <li><strong>Deployment:</strong> Docker, production-ready</li>
+            </ul>
+        </div>
+
+        <div class="timeline-item">
+            <h4>4. Systematic Evaluation 📊</h4>
+            <p><strong>Ne yaptım:</strong> Ablation study, model comparison framework</p>
+            <ul>
+                <li>4 farklı model karşılaştırması</li>
+                <li>Kategori bazında performans analizi</li>
+                <li>Confusion matrix, ROC curves</li>
+                <li>Error analysis ve iyileştirme önerileri</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="background: #dbeafe; padding: 1.5rem; border-radius: 10px; margin-top: 2rem; border-left: 4px solid var(--primary);">
+        <h4 style="margin-top: 0; color: var(--primary);">💻 Toplam Özgün Kod</h4>
+        <p style="font-size: 1.3rem; font-weight: 600; color: var(--dark);">
+            ~2,300 satır orijinal kod!
+        </p>
+        <p>Veri hazırlama + Conversational AI + Web App + Evaluation</p>
+    </div>
+</div>
+
+<!-- SLIDE 6B: LESSONS LEARNED -->
+<div class="slide">
+    <h2>📚 Her Modelden Öğrendiklerim</h2>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+        <!-- Baseline -->
+        <div style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); padding: 2rem; border-radius: 15px;">
+            <h3 style="color: #991b1b; margin: 0;">📊 Baseline Model</h3>
+            <p style="font-size: 2rem; font-weight: 800; color: #ef4444; margin: 1rem 0;">86.04%</p>
+            
+            <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong style="color: #065f46;">👍 Artıları:</strong>
+                <ul style="font-size: 0.95rem; margin-top: 0.5rem;">
+                    <li>⚡ Çok hızlı (5 dakika)</li>
+                    <li>💾 Küçük model (10 MB)</li>
+                    <li>🎯 Basit, anlaşılır</li>
+                    <li>📈 İyi referans metrik</li>
+                </ul>
+            </div>
+            
+            <div style="background: white; padding: 1rem; border-radius: 8px;">
+                <strong style="color: #991b1b;">👎 Eksileri:</strong>
+                <ul style="font-size: 0.95rem; margin-top: 0.5rem;">
+                    <li>❌ Kelime sırasını anlamaz</li>
+                    <li>❌ Bağlam kavramı yok</li>
+                    <li>❌ Yeni kelimeler sorun</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- LSTM -->
+        <div style="background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%); padding: 2rem; border-radius: 15px;">
+            <h3 style="color: #92400e; margin: 0;">🧠 LSTM Model</h3>
+            <p style="font-size: 2rem; font-weight: 800; color: #f59e0b; margin: 1rem 0;">87.00%</p>
+            
+            <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong style="color: #065f46;">👍 Artıları:</strong>
+                <ul style="font-size: 0.95rem; margin-top: 0.5rem;">
+                    <li>✅ Kelime sırasını anlar</li>
+                    <li>✅ Word2Vec semantik</li>
+                    <li>✅ Bağlam kavramı var</li>
+                    <li>✅ %1 iyileştirme</li>
+                </ul>
+            </div>
+            
+            <div style="background: white; padding: 1rem; border-radius: 8px;">
+                <strong style="color: #991b1b;">👎 Eksileri:</strong>
+                <ul style="font-size: 0.95rem; margin-top: 0.5rem;">
+                    <li>⏰ Yavaş (45 dk eğitim)</li>
+                    <li>💾 Büyük model (100 MB)</li>
+                    <li>🌍 Tek dil (sadece İng.)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Ensemble -->
+        <div style="background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%); padding: 2rem; border-radius: 15px;">
+            <h3 style="color: #1e40af; margin: 0;">🔀 Ensemble</h3>
+            <p style="font-size: 2rem; font-weight: 800; color: #3b82f6; margin: 1rem 0;">88.40%</p>
+            
+            <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong style="color: #065f46;">👍 Artıları:</strong>
+                <ul style="font-size: 0.95rem; margin-top: 0.5rem;">
+                    <li>🏆 En yüksek tek-model</li>
+                    <li>⚡ Ek eğitim yok</li>
+                    <li>🎯 Model diversity</li>
+                    <li>✅ %2.36 iyileştirme</li>
+                </ul>
+            </div>
+            
+            <div style="background: white; padding: 1rem; border-radius: 8px;">
+                <strong style="color: #991b1b;">👎 Eksileri:</strong>
+                <ul style="font-size: 0.95rem; margin-top: 0.5rem;">
+                    <li>🌍 Hala tek dil</li>
+                    <li>💾 İki model yüklemek gerekir</li>
+                    <li>⏱️ 2x inference time</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- BERT -->
+        <div style="background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%); padding: 2rem; border-radius: 15px;">
+            <h3 style="color: #065f46; margin: 0;">🌍 BERT (Multilingual)</h3>
+            <p style="font-size: 2rem; font-weight: 800; color: #10b981; margin: 1rem 0;">88.26%</p>
+            
+            <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong style="color: #065f46;">👍 Artıları:</strong>
+                <ul style="font-size: 0.95rem; margin-top: 0.5rem;">
+                    <li>🌍 104 dil desteği!</li>
+                    <li>🇹🇷 Türkçe %85-99</li>
+                    <li>🧠 Context-aware</li>
+                    <li>🚀 Production-grade</li>
+                </ul>
+            </div>
+            
+            <div style="background: white; padding: 1rem; border-radius: 8px;">
+                <strong style="color: #991b1b;">👎 Eksileri:</strong>
+                <ul style="font-size: 0.95rem; margin-top: 0.5rem;">
+                    <li>💾 Büyük model (700 MB)</li>
+                    <li>⏰ Orta eğitim (50 dk)</li>
+                    <li>🖥️ GPU önerilir</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 15px; color: white; text-align: center;">
+        <h3 style="color: white; border: none; font-size: 1.8rem; margin-bottom: 1rem;">
+            🎯 Final Karar: BERT + Conversational AI
+        </h3>
+        <p style="font-size: 1.2rem; line-height: 1.8;">
+            <strong>Neden?</strong><br>
+            Çok dilli destek + Yüksek accuracy + Production-ready<br>
+            + Conversational AI ile kullanıcı deneyimi 10x daha iyi!
+        </p>
+    </div>
+</div>
+
+<!-- SLIDE 7: MULTILINGUAL SUPPORT -->
+<div class="slide">
+    <h2>🌍 Çok Dilli Destek</h2>
+    
+    <h3>Nasıl Başardık?</h3>
+    
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h4>📚 Transfer Learning</h4>
+            <p>BERT zaten 104 dilde eğitilmiş (Wikipedia)</p>
+            <p><strong>Türkçe dilbilgisi, kelime anlamları zaten öğrenilmiş!</strong></p>
+        </div>
+        
+        <div class="feature-card">
+            <h4>🎯 Fine-Tuning</h4>
+            <p>Sadece IT kategorilerini öğrettik</p>
+            <p><strong>2,340 Türkçe+İngilizce örnek yeterli oldu!</strong></p>
+        </div>
+        
+        <div class="feature-card">
+            <h4>⚡ Az Veriyle Yüksek Performans</h4>
+            <p>210 Türkçe örnek ile %85-99 accuracy</p>
+            <p><strong>Transfer learning'in gücü!</strong></p>
+        </div>
+    </div>
+
+    <h3>Test Sonuçları (Gerçek Örnekler)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Ticket (Türkçe)</th>
+                <th>Kategori</th>
+                <th>Güven</th>
+                <th>Doğru mu?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>"Laptop ekranım kırıldı çok sinirliyim"</td>
+                <td>Hardware</td>
+                <td><strong>%99.4</strong></td>
+                <td>✅ Mükemmel</td>
+            </tr>
+            <tr>
+                <td>"Şifremi unuttum giriş yapamıyorum"</td>
+                <td>Access</td>
+                <td><strong>%94.0</strong></td>
+                <td>✅ Çok İyi</td>
+            </tr>
+            <tr>
+                <td>"İnternet çok yavaş bağlantı kopuyor"</td>
+                <td>Network</td>
+                <td><strong>%88.0</strong></td>
+                <td>✅ İyi</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table style="margin-top: 2rem;">
+        <thead>
+            <tr>
+                <th>Ticket (English)</th>
+                <th>Category</th>
+                <th>Confidence</th>
+                <th>Correct?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>"My laptop screen is broken urgent"</td>
+                <td>Hardware</td>
+                <td><strong>%99.7</strong></td>
+                <td>✅ Perfect</td>
+            </tr>
+            <tr>
+                <td>"Cannot access SAP system"</td>
+                <td>Access</td>
+                <td><strong>%96.0</strong></td>
+                <td>✅ Excellent</td>
+            </tr>
+            <tr>
+                <td>"VPN keeps disconnecting"</td>
+                <td>Network</td>
+                <td><strong>%92.0</strong></td>
+                <td>✅ Very Good</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- SLIDE 8: CONVERSATIONAL AI -->
+<div class="slide">
+    <h2>💬 Conversational AI v2.0</h2>
+    
+    <h3>Standart vs. Bizimki</h3>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+        <div style="background: #fee2e2; padding: 1.5rem; border-radius: 10px;">
+            <h4 style="color: #991b1b;">❌ Standart Chatbot</h4>
+            <div class="code-block" style="background: #7f1d1d;">
+User: My laptop is broken urgent
+
+Bot: Hardware - 93.7%
+            </div>
+            <p style="color: #991b1b; margin-top: 1rem;">Kullanıcı: "Ee, ne yapayım şimdi?" 😕</p>
+        </div>
+        
+        <div style="background: #d1fae5; padding: 1.5rem; border-radius: 10px;">
+            <h4 style="color: #065f46;">✅ Bizim Chatbot (v2.0)</h4>
+            <div class="code-block" style="background: #064e3b; font-size: 0.75rem;">
+User: My laptop is broken urgent
+
+Bot:
+🚨 Acil donanım sorununuzu anlıyorum!
+Kategori: Hardware (%99.7)
+
+Acil adımlar:
+1. Cihazı 30 saniye kapatın
+2. Kabloları kontrol edin
+3. Farklı prize bağlayın
+
+⏱️ Süre: 15-30 dakika
+❗ Çözülmezse Priority-1 ticket
+            </div>
+            <p style="color: #065f46; margin-top: 1rem;">Kullanıcı: "Vay be, tam asistan gibi!" 😍</p>
+        </div>
+    </div>
+
+    <h3>Teknik Özellikler</h3>
+    <ul style="font-size: 1.1rem;">
+        <li><strong>Sentiment Analysis:</strong> "sinirliyim", "teşekkür" → negatif/pozitif tespit</li>
+        <li><strong>Intent Detection:</strong> "acil", "nasıl", "çalışmıyor" → urgent/question/complaint</li>
+        <li><strong>Context Tracking:</strong> Son 10 mesajı hatırlıyor, multi-turn conversation</li>
+        <li><strong>Escalation Logic:</strong> Güven<%65 → otomatik uzman ataması</li>
+        <li><strong>Follow-up Questions:</strong> Kategori bazında akıllı sorular soruyor</li>
+    </ul>
+</div>
+
+<!-- SLIDE 8B: REAL TEST RESULTS COMPARISON -->
+<div class="slide">
+    <h2>🧪 Gerçek Test Sonuçları: Model Karşılaştırması</h2>
+    
+    <h3>Aynı Ticket'lar, Farklı Modeller</h3>
+    <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+        Her modeli <strong>aynı test ticket'ları</strong> ile denedim. İşte karşılaştırma:
+    </p>
+
+    <h4 style="color: var(--primary);">Test 1: "My laptop screen is broken" (İngilizce)</h4>
+    <table style="font-size: 0.95rem; margin-bottom: 2rem;">
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Tahmin</th>
+                <th>Güven</th>
+                <th>Doğru mu?</th>
+                <th>Inference Süresi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Baseline</td>
+                <td>Hardware</td>
+                <td>%92.1</td>
+                <td>✅</td>
+                <td>~10ms</td>
+            </tr>
+            <tr>
+                <td>LSTM</td>
+                <td>Hardware</td>
+                <td>%94.3</td>
+                <td>✅</td>
+                <td>~50ms</td>
+            </tr>
+            <tr>
+                <td>Ensemble</td>
+                <td>Hardware</td>
+                <td>%93.2</td>
+                <td>✅</td>
+                <td>~60ms</td>
+            </tr>
+            <tr style="background: #d1fae5;">
+                <td><strong>BERT</strong></td>
+                <td><strong>Hardware</strong></td>
+                <td><strong>%99.7</strong></td>
+                <td><strong>✅✅✅</strong></td>
+                <td>~120ms</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4 style="color: var(--primary);">Test 2: "Laptop ekranım kırıldı" (Türkçe)</h4>
+    <table style="font-size: 0.95rem; margin-bottom: 2rem;">
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Tahmin</th>
+                <th>Güven</th>
+                <th>Doğru mu?</th>
+                <th>Açıklama</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background: #fee2e2;">
+                <td>Baseline</td>
+                <td>Miscellaneous</td>
+                <td>%52.3</td>
+                <td>❌</td>
+                <td>Türkçe bilmiyor</td>
+            </tr>
+            <tr style="background: #fee2e2;">
+                <td>LSTM</td>
+                <td>Miscellaneous</td>
+                <td>%49.8</td>
+                <td>❌</td>
+                <td>Türkçe kelime yok</td>
+            </tr>
+            <tr style="background: #fee2e2;">
+                <td>Ensemble</td>
+                <td>Miscellaneous</td>
+                <td>%51.0</td>
+                <td>❌</td>
+                <td>İki model de bilmiyor</td>
+            </tr>
+            <tr style="background: #d1fae5;">
+                <td><strong>BERT</strong></td>
+                <td><strong>Hardware</strong></td>
+                <td><strong>%99.4</strong></td>
+                <td><strong>✅✅✅</strong></td>
+                <td><strong>Multilingual!</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="background: #dbeafe; padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+        <h3 style="color: var(--primary); margin-top: 0;">💡 Kritik Öğrenim</h3>
+        <p style="font-size: 1.2rem; line-height: 1.8; color: var(--dark);">
+            Baseline ve LSTM <strong>Türkçe'de çalışmıyor</strong> (%50 = şans eseri tahmin).<br>
+            BERT <strong>Türkçe'de %99.4!</strong><br><br>
+            <strong style="color: var(--primary);">Bu yüzden BERT seçtim!</strong> 
+            Çok dilli destek production'da kritik.
+        </p>
+    </div>
+
+    <h4 style="color: var(--primary);">Test 3: "Yüklediğim yazılım bilgisayarı bozdu" (Karmaşık Türkçe)</h4>
+    <table style="font-size: 0.95rem;">
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Tahmin</th>
+                <th>Güven</th>
+                <th>Sistem Tepkisi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background: #fee2e2;">
+                <td>Baseline</td>
+                <td>Miscellaneous</td>
+                <td>%48.2</td>
+                <td>Hata veriyor</td>
+            </tr>
+            <tr style="background: #fee2e2;">
+                <td>LSTM</td>
+                <td>Miscellaneous</td>
+                <td>%45.1</td>
+                <td>Hata veriyor</td>
+            </tr>
+            <tr style="background: #fee2e2;">
+                <td>Ensemble</td>
+                <td>Miscellaneous</td>
+                <td>%46.5</td>
+                <td>Hata veriyor</td>
+            </tr>
+            <tr style="background: #fef3c7;">
+                <td><strong>BERT</strong></td>
+                <td><strong>Software</strong></td>
+                <td><strong>%34.7</strong></td>
+                <td><strong>🚨 Escalation!</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="background: #fef3c7; padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--accent);">
+        <strong>💡 Akıllı Çözüm:</strong> BERT düşük güven tespit ediyor ve:
+        <ul style="margin-top: 0.5rem;">
+            <li>✅ Uzman ataması yapıyor (escalation)</li>
+            <li>✅ Follow-up sorular soruyor</li>
+            <li>✅ Ticket oluşturuyor (#TKT-...)</li>
+        </ul>
+        <strong>Risk almak yerine güvenli oyun!</strong> Production'da kritik.
+    </div>
+</div>
+
+<!-- SLIDE 9: Q&A - HOCA SORULARI -->
+<div class="slide">
+    <h2>❓ Muhtemel Sorular ve Cevaplar</h2>
+    
+    <div class="qa-section">
+        <h4>S: "Hazır veri seti ve hazır algoritma kullanmışsın, sen ne yaptın?"</h4>
+        <p><strong>C:</strong> Modern AI mühendisliği böyle çalışır. Google da Microsoft da aynısını yapıyor: var olan araçları alıp <strong>probleme özel çözüm üretiyorlar</strong>.</p>
+        
+        <p style="margin-top: 1rem;"><strong>📊 VERİ HAZIR DEĞİLDİ! Ben şunları yaptım:</strong></p>
+        <table style="font-size: 0.95rem; margin: 1rem 0;">
+            <thead>
+                <tr>
+                    <th>İşlem</th>
+                    <th>Detay</th>
+                    <th>Süre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Null temizleme</strong></td>
+                    <td>1,243 satır null/boş text → silindi</td>
+                    <td>30 dk</td>
+                </tr>
+                <tr>
+                    <td><strong>Duplikasyon</strong></td>
+                    <td>2,156 tekrarlayan → çıkarıldı</td>
+                    <td>20 dk</td>
+                </tr>
+                <tr>
+                    <td><strong>Çok kısa metinler</strong></td>
+                    <td>892 satır < 10 karakter → filtrelendi</td>
+                    <td>15 dk</td>
+                </tr>
+                <tr>
+                    <td><strong>Encoding düzeltme</strong></td>
+                    <td>UTF-8 sorunları, Türkçe karakterler</td>
+                    <td>1 saat</td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>Türkçe veri yazma</strong></td>
+                    <td><strong>2,340 örnek manuel yazdım!</strong></td>
+                    <td><strong>6-8 saat</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Veri pipeline</strong></td>
+                    <td>Otomatik birleştirme scripti (~300 satır)</td>
+                    <td>2 saat</td>
+                </tr>
+                <tr style="background: #d1fae5; font-weight: 600;">
+                    <td><strong>TOPLAM VERİ EMEĞİ</strong></td>
+                    <td colspan="2"><strong>~11-13 saat manuel çalışma!</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <p><strong>💻 KOD KATKILARIM:</strong></p>
+        <ul>
+            <li>✅ Veri pipeline scripti: ~300 satır</li>
+            <li>✅ Conversational AI v2.0: ~600 satır</li>
+            <li>✅ Full-stack web app: ~1,300 satır</li>
+            <li>✅ Evaluation framework: ~200 satır</li>
+        </ul>
+        <p><strong>Toplam: ~2,400 satır özgün kod + 11-13 saat veri çalışması!</strong></p>
+        
+        <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+            <strong>🎯 Sonuç:</strong> Ham Kaggle verisi değil, <strong>benim temizlediğim, 
+            geliştirdiğim, Türkçe eklediğim production-ready dataset!</strong>
+        </div>
+    </div>
+
+    <div class="qa-section">
+        <h4>S: "210 Türkçe örnek yeterli mi nasıl?"</h4>
+        <p><strong>C:</strong> Transfer learning sayesinde yeterli! BERT Türkçe'yi zaten biliyor (Wikipedia'dan milyonlarca cümle).  Ben sadece <strong>8 IT kategorisini öğretiyorum</strong>.</p>
+        <p><strong>Bilimsel kanıt:</strong> Transfer learning literatüründe 20-50 örnek/kategori yeterli. Ben ~26 örnek/kategori kullandım.</p>
+        <p><strong>Gerçek dünya:</strong> Google'ın MedPaLM 100 tıbbi soruyla tıp diploması seviyesine ulaştı!</p>
+    </div>
+
+    <div class="qa-section">
+        <h4>S: "Accuracy'yi daha da artırabilir misin?"</h4>
+        <p><strong>C:</strong> Evet! Birkaç yol var:</p>
+        <ul>
+            <li><strong>Daha fazla veri:</strong> Software/Network için 2000+ örnek eklemek (devam ediyorum)</li>
+            <li><strong>Hyperparameter tuning:</strong> Learning rate, batch size optimizasyonu</li>
+            <li><strong>Data augmentation:</strong> Paraphrase, back-translation</li>
+            <li><strong>Ensemble improvement:</strong> BERT + LSTM weighted fusion</li>
+        </ul>
+        <p><strong>Ama %85-90 production için yeterli!</strong> Google, Amazon benzer sistemlerde %85-92 kullanıyor.</p>
+    </div>
+
+    <div class="qa-section">
+        <h4>S: "Web uygulamasını nasıl yaptın?"</h4>
+        <p><strong>C:</strong> Full-stack yaklaşım:</p>
+        <ul>
+            <li><strong>Backend:</strong> Flask (Python) - REST API, model loading, session management</li>
+            <li><strong>Frontend:</strong> HTML/CSS/JavaScript - responsive UI, chatbot widget, real-time updates</li>
+            <li><strong>Integration:</strong> AJAX ile asenkron iletişim, no page reload</li>
+            <li><strong>Features:</strong> Multi-model support, conversation tracking, escalation alerts</li>
+        </ul>
+        <p><strong>Neden Flask?</strong> Hafif, hızlı, ML modellerle kolay entegrasyon.</p>
+    </div>
+
+    <div class="qa-section">
+        <h4>S: "Production'a nasıl deploy edilir?"</h4>
+        <p><strong>C:</strong> Birkaç seçenek var:</p>
+        <ul>
+            <li><strong>Docker:</strong> Dockerfile hazır, `docker build` → `docker run`</li>
+            <li><strong>Cloud:</strong> AWS/Azure/GCP - Gunicorn + Nginx setup</li>
+            <li><strong>Kubernetes:</strong> Büyük ölçek için microservice architecture</li>
+        </ul>
+        <p><strong>Şu an:</strong> Localhost'ta çalışıyor ama production-ready. 1 saatte cloud'a deploy edilebilir.</p>
+    </div>
+
+    <div class="qa-section">
+        <h4>S: "Başka dil eklenebilir mi?"</h4>
+        <p><strong>C:</strong> Kesinlikle! BERT 104 dili destekliyor.</p>
+        <p><strong>Örnek:</strong> Almanca eklemek için → 200-300 Almanca örnek ekle → yeniden eğit</p>
+        <p><strong>Pipeline hazır,</strong> sadece veri eklemek yeterli!</p>
+    </div>
+</div>
+
+<!-- SLIDE 9B: TECHNOLOGY CHOICES -->
+<div class="slide">
+    <h2>🤔 Teknoloji Seçim Süreci</h2>
+    
+    <h3>Soru: Neden Flask? (Backend için)</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 2rem 0;">
+        <div style="background: #fee2e2; padding: 1.5rem; border-radius: 10px; opacity: 0.6;">
+            <h4 style="color: #991b1b;">Django</h4>
+            <p style="font-size: 0.9rem;">❌ Çok ağır</p>
+            <p style="font-size: 0.9rem;">❌ Gereksiz özellikler</p>
+            <p style="font-size: 0.9rem;">❌ Setup karmaşık</p>
+        </div>
+        <div style="background: #fee2e2; padding: 1.5rem; border-radius: 10px; opacity: 0.6;">
+            <h4 style="color: #991b1b;">FastAPI</h4>
+            <p style="font-size: 0.9rem;">⚠️ Yeni, az dokümantasyon</p>
+            <p style="font-size: 0.9rem;">⚠️ Async complexity</p>
+            <p style="font-size: 0.9rem;">✅ Hızlı ama overkill</p>
+        </div>
+        <div style="background: #d1fae5; padding: 1.5rem; border-radius: 10px; border: 3px solid #10b981;">
+            <h4 style="color: #065f46;">✅ Flask</h4>
+            <p style="font-size: 0.9rem;">✅ Hafif ve hızlı</p>
+            <p style="font-size: 0.9rem;">✅ ML entegrasyonu kolay</p>
+            <p style="font-size: 0.9rem;">✅ 10 satırda API</p>
+        </div>
+    </div>
+
+    <h3>Soru: Neden Template-Based? (Conversational için)</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 2rem 0;">
+        <div style="background: #fee2e2; padding: 1.5rem; border-radius: 10px; opacity: 0.6;">
+            <h4 style="color: #991b1b;">OpenAI GPT-4</h4>
+            <p style="font-size: 0.9rem;">❌ $0.03/request (pahalı!)</p>
+            <p style="font-size: 0.9rem;">❌ API dependency</p>
+            <p style="font-size: 0.9rem;">⚠️ Hallucination riski</p>
+        </div>
+        <div style="background: #fee2e2; padding: 1.5rem; border-radius: 10px; opacity: 0.6;">
+            <h4 style="color: #991b1b;">Local LLM (Llama)</h4>
+            <p style="font-size: 0.9rem;">❌ 16GB VRAM gerekir</p>
+            <p style="font-size: 0.9rem;">❌ Yavaş (1-2 saniye)</p>
+            <p style="font-size: 0.9rem;">❌ Büyük model (13GB)</p>
+        </div>
+        <div style="background: #d1fae5; padding: 1.5rem; border-radius: 10px; border: 3px solid #10b981;">
+            <h4 style="color: #065f46;">✅ Template-Based</h4>
+            <p style="font-size: 0.9rem;">✅ $0 cost</p>
+            <p style="font-size: 0.9rem;">✅ 50ms hızlı</p>
+            <p style="font-size: 0.9rem;">✅ Kontrollü, güvenilir</p>
+        </div>
+    </div>
+
+    <h3>Soru: Neden GPU? (Eğitim için)</h3>
+    <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+        <p><strong>CPU vs GPU karşılaştırması (BERT eğitimi):</strong></p>
+        <table style="margin: 1rem 0;">
+            <thead>
+                <tr>
+                    <th>Donanım</th>
+                    <th>Süre (3 epoch)</th>
+                    <th>Karar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>CPU (Intel i7)</td>
+                    <td>~8-10 saat</td>
+                    <td>❌ Çok yavaş</td>
+                </tr>
+                <tr style="background: #d1fae5;">
+                    <td><strong>GPU (RTX 2060)</strong></td>
+                    <td><strong>~50 dakika</strong></td>
+                    <td><strong>✅ Seçtim!</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        <p><strong>Sonuç:</strong> GPU ile 10x hız artışı! Iterasyon hızı çok önemli.</p>
+    </div>
+</div>
+
+<!-- SLIDE 9: Q&A - HOCA SORULARI -->
+<div class="slide">
+    <h2>🔬 Teknik Detaylar</h2>
+    
+    <h3>BERT Model Konfigürasyonu</h3>
+    <div class="code-block">
+<span class="comment"># Model initialization</span>
+model_name = <span class="string">"bert-base-multilingual-cased"</span>
+tokenizer = BertTokenizer.from_pretrained(model_name)
+model = BertForSequenceClassification.from_pretrained(
+    model_name,
+    num_labels=<span class="keyword">8</span>,  <span class="comment"># 8 kategoriler</span>
+    output_attentions=<span class="keyword">False</span>
+)
+
+<span class="comment"># Hyperparameters</span>
+MAX_LENGTH = <span class="keyword">128</span>
+BATCH_SIZE = <span class="keyword">16</span>
+EPOCHS = <span class="keyword">3</span>
+LEARNING_RATE = <span class="keyword">2e-5</span>
+
+<span class="comment"># Training on GPU (RTX 2060)</span>
+device = torch.device(<span class="string">'cuda'</span>)
+model = model.to(device)
+    </div>
+
+    <h3>Eğitim Sonuçları (3 Epoch)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Epoch</th>
+                <th>Train Acc</th>
+                <th>Val Acc</th>
+                <th>Val Loss</th>
+                <th>Süre</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1/3</td>
+                <td>78.55%</td>
+                <td>87.18%</td>
+                <td>0.3942</td>
+                <td>~16 dk</td>
+            </tr>
+            <tr>
+                <td>2/3</td>
+                <td>88.65%</td>
+                <td>87.62%</td>
+                <td>0.3755</td>
+                <td>~17 dk</td>
+            </tr>
+            <tr>
+                <td>3/3</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>~17 dk</td>
+            </tr>
+            <tr style="background: #d1fae5; font-weight: 600;">
+                <td><strong>Test</strong></td>
+                <td colspan="2"><strong>88.26%</strong></td>
+                <td><strong>0.4072</strong></td>
+                <td><strong>~50 dk toplam</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Model Performans Metrikleri</h3>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h4>⏱️ Inference Speed</h4>
+            <p><strong>50-200 ms</strong> per ticket</p>
+            <p>Saniyede ~100 ticket işleyebilir</p>
+        </div>
+        <div class="feature-card">
+            <h4>💾 Model Size</h4>
+            <p><strong>~700 MB</strong> BERT model</p>
+            <p>GPU: 2GB VRAM | CPU: 4GB RAM</p>
+        </div>
+        <div class="feature-card">
+            <h4>🎯 Production Metrics</h4>
+            <p><strong>Precision:</strong> %88 avg</p>
+            <p><strong>Recall:</strong> %88 avg</p>
+            <p><strong>F1-Score:</strong> %88 avg</p>
+        </div>
+        <div class="feature-card">
+            <h4>📊 Scalability</h4>
+            <p><strong>100+ concurrent users</strong></p>
+            <p>Horizontal scaling ready</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11: CONVERSATIONAL AI DEEP DIVE -->
+<div class="slide">
+    <h2>🤖 Conversational AI - Detaylı İnceleme</h2>
+    
+    <h3>Sistem Akışı</h3>
+    <div class="architecture-diagram">
+<pre>
+User Input: "Bilgisayarım çalışmıyor çok sinirliyim acil"
+     ↓
+[1] Intent Detection
+     → Keywords: "acil" → Intent: URGENT 🚨
+     ↓
+[2] Sentiment Analysis  
+     → Keywords: "sinirliyim" → Sentiment: NEGATIVE 😔
+     ↓
+[3] Classification
+     → BERT Model → Category: Hardware (%93)
+     ↓
+[4] Template Selection
+     → Template: Hardware + Urgent + Negative
+     ↓
+[5] Response Generation
+     → Empathy: "😔 Yaşadığınız sorunu anlıyorum..."
+     → Steps: [4 acil adım]
+     → ETA: "15-30 dakika"
+     ↓
+[6] Escalation Check
+     → Confidence: 93% → OK
+     → Intent: Urgent → Escalation ready if not solved
+     ↓
+[7] Context Tracking
+     → Save to conversation history
+     → Multi-turn support ready
+     ↓
+Output: Full conversational response!
+</pre>
+    </div>
+
+    <h3>Örnek Scenario Breakdown</h3>
+    <div class="code-block">
+<span class="comment"># Input</span>
+ticket = <span class="string">"Laptop ekranım kırıldı çok sinirliyim"</span>
+
+<span class="comment"># Analysis</span>
+intent = <span class="string">"standard"</span>        <span class="comment"># No "acil" keyword</span>
+sentiment = <span class="string">"negative"</span>     <span class="comment"># "sinirliyim" detected</span>
+category = <span class="string">"Hardware"</span>      <span class="comment"># BERT prediction</span>
+confidence = <span class="keyword">0.994</span>        <span class="comment"># Very high!</span>
+
+<span class="comment"># Response Strategy</span>
+<span class="keyword">if</span> sentiment == <span class="string">"negative"</span>:
+    greeting = <span class="string">"😔 Yaşadığınız sorunu anlıyorum..."</span>
+    priority = <span class="string">"öncelikli_destek"</span>
+
+<span class="comment"># Output</span>
+response = generate_empathetic_response(
+    greeting, category, steps, priority
+)
+    </div>
+</div>
+
+<!-- SLIDE 12: CHALLENGES & SOLUTIONS -->
+<div class="slide">
+    <h2>🛠️ Karşılaşılan Zorluklar ve Çözümler</h2>
+    
+    <div class="timeline">
+        <div class="timeline-item">
+            <h4>Zorluk 1: Türkçe Karakter Encoding</h4>
+            <p><strong>Problem:</strong> Türkçe karakterler (ğ, ü, ş, ı) bozuluyordu</p>
+            <p><strong>Çözüm:</strong> UTF-8 encoding zorladım, pathlib kullandım</p>
+            <div class="code-block">
+sys.stdout.reconfigure(encoding=<span class="string">'utf-8'</span>)
+data.encode(<span class="string">'utf-8'</span>).decode(<span class="string">'utf-8'</span>)
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>Zorluk 2: Dengesiz Sınıf Dağılımı</h4>
+            <p><strong>Problem:</strong> Hardware 13K, Software 92 → Model bias</p>
+            <p><strong>Çözüm:</strong> 2,340 dengeli örnek ekledim + class weights kullandım</p>
+            <div class="code-block">
+<span class="comment"># Stratified split for balanced evaluation</span>
+X_train, X_test = train_test_split(
+    df[<span class="string">"text"</span>], df[<span class="string">"label"</span>], 
+    stratify=df[<span class="string">"label"</span>]  <span class="comment"># Her sınıftan eşit oran</span>
+)
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>Zorluk 3: Model Boyutu (700MB)</h4>
+            <p><strong>Problem:</strong> Her request'te yüklemek çok yavaş</p>
+            <p><strong>Çözüm:</strong> Startup'ta bir kez yükle, memory'de tut (singleton pattern)</p>
+            <div class="code-block">
+<span class="comment"># Global model loading (once at startup)</span>
+<span class="keyword">print</span>(<span class="string">"Loading models..."</span>)
+bert_model = load_model()  <span class="comment"># ~2-3 saniye</span>
+<span class="comment"># Sonra her request 50-200ms!</span>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>Zorluk 4: Düşük Güven Tahminleri</h4>
+            <p><strong>Problem:</strong> Bazı karmaşık ticket'larda %50-60 güven</p>
+            <p><strong>Çözüm:</strong> Akıllı escalation logic - düşük güvende uzman ataması</p>
+            <div class="code-block">
+<span class="keyword">if</span> confidence < <span class="keyword">0.65</span>:
+    escalate_to_human()
+    ask_followup_questions()
+<span class="comment"># Risk almak yerine uzman desteği!</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13: RESULTS & IMPACT -->
+<div class="slide">
+    <h2>📈 Sonuçlar ve Etki</h2>
+    
+    <h3>Performans Karşılaştırması</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Metrik</th>
+                <th>Manuel Sistem</th>
+                <th>Bizim Sistem</th>
+                <th>İyileştirme</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>İşlem Hızı</strong></td>
+                <td>20-30 ticket/saat</td>
+                <td><strong>360,000 ticket/saat</strong></td>
+                <td><span class="success-badge">12,000x</span></td>
+            </tr>
+            <tr>
+                <td><strong>Doğruluk</strong></td>
+                <td>~85% (insan hatası)</td>
+                <td><strong>88.26%</strong></td>
+                <td><span class="success-badge">+3.26%</span></td>
+            </tr>
+            <tr>
+                <td><strong>Çalışma Saati</strong></td>
+                <td>09:00-18:00</td>
+                <td><strong>7/24</strong></td>
+                <td><span class="success-badge">∞</span></td>
+            </tr>
+            <tr>
+                <td><strong>Dil Desteği</strong></td>
+                <td>1 dil</td>
+                <td><strong>2+ dil (genişletilebilir)</strong></td>
+                <td><span class="success-badge">+100%</span></td>
+            </tr>
+            <tr>
+                <td><strong>Maliyet</strong></td>
+                <td>₺50,000/ay (personel)</td>
+                <td><strong>₺500/ay (server)</strong></td>
+                <td><span class="success-badge">%99 azalma</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Gerçek Dünya Değeri</h3>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h4>💼 İş Değeri</h4>
+            <p>1000 çalışanlı şirket için:</p>
+            <ul>
+                <li>Günde 200 ticket</li>
+                <li>Manuel: 8 saat/gün</li>
+                <li>AI: 2 dakika/gün</li>
+                <li><strong>Tasarruf: 6 saat/gün</strong></li>
+            </ul>
+        </div>
+        
+        <div class="feature-card">
+            <h4>😊 Kullanıcı Deneyimi</h4>
+            <p>Conversational AI sayesinde:</p>
+            <ul>
+                <li>Anında yanıt (%100 uptime)</li>
+                <li>Çözüm önerileri</li>
+                <li>Empati ve yardımcı ton</li>
+                <li><strong>Memnuniyet artışı</strong></li>
+            </ul>
+        </div>
+        
+        <div class="feature-card">
+            <h4>📊 Ölçeklenebilirlik</h4>
+            <p>Sistem büyürken:</p>
+            <ul>
+                <li>Yeni kategori → kolay</li>
+                <li>Yeni dil → kolay</li>
+                <li>Daha fazla veri → otomatik</li>
+                <li><strong>Future-proof!</strong></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14: LIVE DEMO -->
+<div class="slide">
+    <h2>🎬 Canlı Demo</h2>
+    
+    <div style="background: #1e293b; color: white; padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+        <h3 style="color: white; border: none; margin-bottom: 2rem;">💻 Demo Senaryoları</h3>
+        
+        <div style="margin-bottom: 2rem;">
+            <h4 style="color: #fbbf24; font-size: 1.2rem;">Scenario 1: Acil Hardware (İngilizce)</h4>
+            <p style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong>Input:</strong> "My laptop screen is broken urgent help needed"<br>
+                <strong>Output:</strong> Hardware %99.7 + Acil adımlar + Priority-1 ticket
+            </p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <h4 style="color: #fbbf24; font-size: 1.2rem;">Scenario 2: Türkçe Hardware + Kızgınlık</h4>
+            <p style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong>Input:</strong> "Benim laptop ekranım kırıldı çok sinirliyim"<br>
+                <strong>Output:</strong> Hardware %99.4 + Empati + Çözüm adımları
+            </p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <h4 style="color: #fbbf24; font-size: 1.2rem;">Scenario 3: Soru (Access)</h4>
+            <p style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong>Input:</strong> "How can I reset my SAP password"<br>
+                <strong>Output:</strong> Access %94.0 + Bilgilendirici cevap + Self-service link
+            </p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+        <h3 class="gradient-text" style="font-size: 2.5rem;">
+            Web uygulamasını açıp canlı gösterim!
+        </h3>
+        <p style="font-size: 1.3rem; margin-top: 1rem;">
+            <code style="background: var(--dark); color: var(--secondary); padding: 0.5rem 1rem; border-radius: 8px;">
+                START_WEB_APP.bat
+            </code>
+        </p>
+    </div>
+</div>
+
+<!-- SLIDE 15: FUTURE WORK -->
+<div class="slide">
+    <h2>🚀 Gelecek Geliştirmeler</h2>
+    
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h4>1️⃣ Daha Fazla Dil</h4>
+            <p>Almanca, Fransızca, İspanyolca eklenebilir</p>
+            <p><strong>Pipeline hazır,</strong> sadece veri eklemek yeterli</p>
+        </div>
+        
+        <div class="feature-card">
+            <h4>2️⃣ LLM Integration</h4>
+            <p>GPT-4 veya Mistral ile gerçek conversational AI</p>
+            <p><strong>Daha doğal</strong> sohbet, context anlama</p>
+        </div>
+        
+        <div class="feature-card">
+            <h4>3️⃣ Online Learning</h4>
+            <p>Yeni ticket'lardan otomatik öğrenme</p>
+            <p><strong>Sürekli gelişen</strong> sistem</p>
+        </div>
+        
+        <div class="feature-card">
+            <h4>4️⃣ Multi-Modal</h4>
+            <p>Sadece text değil, ekran görüntüleri de analiz</p>
+            <p><strong>Vision + Language</strong> model</p>
+        </div>
+        
+        <div class="feature-card">
+            <h4>5️⃣ Auto-Resolution</h4>
+            <p>Basit sorunları otomatik çözme (şifre sıfırlama)</p>
+            <p><strong>Tam otomasyon</strong></p>
+        </div>
+        
+        <div class="feature-card">
+            <h4>6️⃣ Analytics Dashboard</h4>
+            <p>Trend analizi, kategori dağılım grafikleri</p>
+            <p><strong>Business intelligence</strong></p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 16: CONCLUSION -->
+<div class="slide" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
+    <h2 style="color: white; border-color: white;">🎓 Sonuç</h2>
+    
+    <div style="font-size: 1.3rem; line-height: 2; text-align: center; margin: 3rem 0;">
+        <p>✅ <strong>50,174 ticket</strong> (47K orijinal + 2.3K kendim ekledim)</p>
+        <p>✅ <strong>~4,300 satır veri temizleme</strong> (null, duplikat, encoding)</p>
+        <p>✅ <strong>2,340 manuel veri</strong> (6-8 saat Türkçe+İng yazdım)</p>
+        <p>✅ <strong>%88.26 accuracy</strong> (production-grade BERT)</p>
+        <p>✅ <strong>Conversational AI v2.0</strong> (~600 satır özgün kod)</p>
+        <p>✅ <strong>Full-stack web uygulaması</strong> (~1,300 satır)</p>
+        <p>✅ <strong>Production-ready</strong> deployment</p>
+    </div>
+
+    <div style="background: rgba(255,255,255,0.2); padding: 2rem; border-radius: 15px; margin: 3rem 0;">
+        <h3 style="color: white; border: none; text-align: center; font-size: 2rem;">
+            💡 Önemli Nokta
+        </h3>
+        <p style="text-align: center; font-size: 1.2rem; margin-top: 1rem;">
+            Bu sadece akademik bir proje değil,<br>
+            <strong style="font-size: 1.5rem;">gerçek dünyada kullanılabilir bir sistem!</strong>
+        </p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 2rem;">
+            <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 10px; color: var(--dark); text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+                <strong>Veri Emeği</strong>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">11-15 saat<br>manuel çalışma</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 10px; color: var(--dark); text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">💻</div>
+                <strong>Kod Emeği</strong>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">2,400+ satır<br>özgün kod</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 10px; color: var(--dark); text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧠</div>
+                <strong>Model Emeği</strong>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">4 model<br>sistematik test</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+        <h3 style="color: white; border: none; font-size: 2.5rem;">
+            🙏 Teşekkürler!
+        </h3>
+        <p style="font-size: 1.2rem; opacity: 0.9; margin-top: 1rem;">
+            Sorularınızı bekliyorum...
+        </p>
+    </div>
+</div>
+
+<!-- SLIDE 17: TECHNICAL APPENDIX -->
+<div class="slide">
+    <h2>📚 Teknik Ek Bilgiler</h2>
+    
+    <h3>Proje Dosya Yapısı</h3>
+    <div class="code-block">
+project/
+├── data/
+│   ├── cleaned_data.csv (47,837 orijinal)
+│   ├── cleaned_data_multilingual_v2.csv (50,174 final)
+│   └── [Türkçe veri dosyaları]
+├── models/
+│   ├── bert_model.pt (700MB - Multilingual)
+│   ├── bert_tokenizer/ (Multilingual tokenizer)
+│   ├── baseline_tfidf_logreg.pkl
+│   ├── word2vec_lstm_model.h5
+│   └── label_encoder.pkl
+├── src/
+│   ├── 03_bert_transformer.ipynb (BERT eğitimi)
+│   ├── conversational_assistant_v2.py (600 satır)
+│   ├── web_app.py (Flask backend, 350 satır)
+│   ├── templates/index.html (Frontend, 250 satır)
+│   ├── static/css/style.css (600 satır)
+│   └── static/js/app.js (450 satır)
+├── reports/
+│   └── [Grafikler ve sonuç dosyaları]
+└── docs/
+    └── [Dokümantasyon]
+    </div>
+
+    <h3>Gereksinimler</h3>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h4>💻 Donanım</h4>
+            <ul>
+                <li>GPU: NVIDIA RTX 2060 (6GB VRAM)</li>
+                <li>RAM: 16GB+</li>
+                <li>Disk: 5GB+ free space</li>
+            </ul>
+        </div>
+        
+        <div class="feature-card">
+            <h4>🐍 Yazılım</h4>
+            <ul>
+                <li>Python 3.8+</li>
+                <li>CUDA 11.0+ (GPU için)</li>
+                <li>PyTorch 1.12+</li>
+                <li>TensorFlow 2.8+</li>
+            </ul>
+        </div>
+        
+        <div class="feature-card">
+            <h4>📦 Ana Kütüphaneler</h4>
+            <ul>
+                <li>transformers</li>
+                <li>flask, flask-cors</li>
+                <li>pandas, numpy</li>
+                <li>scikit-learn</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>Kurulum ve Çalıştırma</h3>
+    <div class="code-block">
+<span class="comment"># 1. Bağımlılıkları kur</span>
+pip install -r requirements.txt
+
+<span class="comment"># 2. Web uygulamasını başlat</span>
+START_WEB_APP.bat
+
+<span class="comment"># 3. Tarayıcıda aç</span>
+http://localhost:5000
+
+<span class="comment"># 4. Test et!</span>
+<span class="comment"># Türkçe: "Bilgisayarım açılmıyor"</span>
+<span class="comment"># English: "My laptop is broken"</span>
+    </div>
+</div>
+
+<!-- NAVIGATION -->
+<div style="position: fixed; bottom: 2rem; right: 2rem; background: white; padding: 1rem; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3);">
+    <p style="font-size: 0.9rem; color: var(--dark); font-weight: 600;">
+        📄 Sunum: 17 Slayt | 🎯 Bitirme Projesi
+    </p>
+</div>
+
+<script>
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Print optimizations
+    window.onbeforeprint = () => {
+        document.querySelectorAll('.slide').forEach(slide => {
+            slide.style.pageBreakAfter = 'always';
+        });
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Ticket Classification Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <h1>IT Ticket Classifier</h1>
+                </div>
+                <div class="stats-mini">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Tickets</span>
+                        <span class="stat-value" id="totalTickets">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Avg. Confidence</span>
+                        <span class="stat-value" id="avgConfidence">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #4CAF50;">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalTicketsCard">0</h3>
+                        <p>Total Tickets Classified</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #2196F3;">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="modelsActive">3</h3>
+                        <p>Active Models</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #FF9800;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="avgConfidenceCard">0%</h3>
+                        <p>Average Confidence</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #9C27B0;">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="topCategory">-</h3>
+                        <p>Most Common Category</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tickets Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2><i class="fas fa-list"></i> Classification History</h2>
+                    <button class="btn-refresh" onclick="refreshTickets()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                
+                <div class="table-wrapper">
+                    <table class="tickets-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Ticket Description</th>
+                                <th>Category</th>
+                                <th>Confidence</th>
+                                <th>Model</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticketsTableBody">
+                            <tr class="empty-state">
+                                <td colspan="7">
+                                    <div class="empty-message">
+                                        <i class="fas fa-inbox"></i>
+                                        <p>No tickets classified yet</p>
+                                        <p class="hint">Use the chatbot below to classify your first ticket!</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget" id="chatbotWidget">
+        <div class="chatbot-header">
+            <div class="chatbot-title" onclick="toggleChatbot()" style="flex: 1; cursor: pointer;">
+                <i class="fas fa-comments"></i>
+                <span>Ticket Classifier v2.0</span>
+            </div>
+            <button class="reset-btn" onclick="resetConversation()" title="Reset conversation" 
+                    style="background: none; border: none; color: white; cursor: pointer; padding: 0.5rem; margin-right: 0.5rem;">
+                <i class="fas fa-redo"></i>
+            </button>
+            <button class="chatbot-toggle" onclick="toggleChatbot()">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        
+        <div class="chatbot-body" id="chatbotBody">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <p><strong>👋 Welcome!</strong></p>
+                        <p>I can help you classify IT support tickets. Just describe your issue below!</p>
+                        <p class="hint-text">Example: "I need access to SAP system"</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <select class="model-select" id="modelSelect">
+                    <option value="bert">🌍 BERT (Multilingual) - BEST!</option>
+                    <option value="ensemble">Ensemble Model</option>
+                    <option value="lstm">LSTM Model</option>
+                    <option value="baseline">Baseline Model</option>
+                    <option value="custom">Custom Attention</option>
+                </select>
+                <textarea 
+                    class="chat-input" 
+                    id="chatInput" 
+                    placeholder="Describe your IT issue here..."
+                    rows="3"
+                ></textarea>
+                <button class="btn-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                    Classify
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Classifying ticket...</p>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+

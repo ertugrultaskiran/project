@@ -1,0 +1,267 @@
+# IT Ticket Conversational Response Templates
+# Turkish & English Support
+
+Hardware:
+  greeting_confident: "✅ Donanım sorununu net bir şekilde tespit ettim."
+  greeting_uncertain: "📋 Bu muhtemelen bir donanım problemi gibi görünüyor."
+  greeting_urgent: "🚨 Acil donanım sorununuzu anlıyorum, hemen bakalım!"
+  
+  urgent_steps:
+    - "Cihazı tamamen kapatıp 30 saniye bekleyin, sonra tekrar açın"
+    - "Tüm kabloların (güç, HDMI, USB) sağlam takıldığını kontrol edin"
+    - "Farklı bir güç kaynağına veya prize bağlayın"
+    - "Laptop ise bataryayı çıkarıp sadece adaptörle çalıştırmayı deneyin"
+  
+  standard_steps:
+    - "Bilgisayarı yeniden başlatın (soft reset)"
+    - "BIOS/UEFI ekranına girebiliyor musunuz kontrol edin (F2 veya Del tuşu)"
+    - "Harici cihazları (USB, harici disk) çıkarıp deneyin"
+    - "Sistem loglarını kontrol edin (Windows: Event Viewer)"
+    - "Donanım diagnostics aracını çalıştırın"
+  
+  question_response: |
+    Donanım sorunlarında en sık karşılaşılan problemler:
+    • Güç kaynaklı: Adaptör, pil, anakart güç devresi
+    • RAM problemleri: Bellek hatası, kötü slot
+    • Disk arızaları: HDD/SSD okuma hatası
+    • Ekran sorunları: Panel, kablo, grafik kartı
+  
+  eta: "15-30 dakika (basit sorunlar için)"
+  escalation_threshold: 3
+  priority_keywords: ["açılmıyor", "yanmıyor", "kırık", "bozuk", "çalışmıyor"]
+
+Access:
+  greeting_confident: "✅ Erişim sorununuzu tespit ettim, hemen çözelim."
+  greeting_uncertain: "📋 Bu bir erişim/yetkilendirme problemi olabilir."
+  greeting_urgent: "🚨 Acil erişim sorununuzu çözüyorum!"
+  
+  urgent_steps:
+    - "Şifre sıfırlama self-service: https://password-reset.company.com"
+    - "Hesap kilitliyse IT helpdesk: (555) 123-4567"
+    - "VPN bağlantınızı kontrol edin ve yeniden bağlanın"
+  
+  standard_steps:
+    - "Caps Lock kapalı olduğundan emin olun"
+    - "Kullanıcı adınızı kontrol edin (@domain.com ekli mi?)"
+    - "Farklı bir tarayıcı veya incognito modda deneyin"
+    - "Tarayıcı cache ve cookies'leri temizleyin"
+    - "VPN üzerinden bağlanmanız gerekiyorsa kontrol edin"
+  
+  question_response: |
+    Erişim problemlerinin çözümü:
+    • Şifre sorunları: Self-service portal kullanın
+    • Hesap kilidi: 3 yanlış denemeden sonra 30 dakika kilitleniyor
+    • Yetki eksikliği: Yöneticinizden onay gerekir
+    • VPN problemleri: Sertifika veya bağlantı sorunu olabilir
+  
+  eta: "5-10 dakika"
+  escalation_threshold: 2
+  priority_keywords: ["şifremi unuttum", "giriş yapamıyorum", "erişemiyorum", "kilitlendi"]
+
+Network:
+  greeting_confident: "✅ Ağ bağlantı sorununuzu tespit ettim."
+  greeting_uncertain: "📋 Bu bir network problemi gibi görünüyor."
+  greeting_urgent: "🚨 İnternet bağlantı sorununuzu acil çözüyoruz!"
+  
+  urgent_steps:
+    - "WiFi'yi kapat-aç yapın (veya Airplane mode aç-kapat)"
+    - "Router'ı yeniden başlatın (30 saniye kapalı tutun)"
+    - "Ethernet kablosu varsa kablolu bağlantı deneyin"
+    - "Farklı WiFi ağına bağlanabiliyor musunuz test edin"
+  
+  standard_steps:
+    - "Network troubleshooter çalıştırın (Windows)"
+    - "DNS ayarlarını kontrol edin (8.8.8.8 - Google DNS)"
+    - "IP adresinizi yenileyin: ipconfig /release ve ipconfig /renew"
+    - "Firewall veya antivirus geçici olarak devre dışı bırakıp test edin"
+    - "VPN bağlantınızı kontrol edin"
+  
+  question_response: |
+    Network sorunlarının sebepleri:
+    • WiFi sinyal gücü zayıf: Router'a yaklaşın
+    • ISP problemi: Servis sağlayıcınızı kontrol edin
+    • DNS çözümleme hatası: DNS değiştirin
+    • IP çakışması: DHCP yenileme yapın
+  
+  eta: "10-20 dakika"
+  escalation_threshold: 3
+  priority_keywords: ["internet yok", "bağlanamıyorum", "yavaş", "kopuyor"]
+
+Software:
+  greeting_confident: "✅ Yazılım sorununuzu tespit ettim."
+  greeting_uncertain: "📋 Bu bir yazılım veya uygulama problemi olabilir."
+  greeting_urgent: "🚨 Kritik yazılım sorununuza bakıyorum!"
+  
+  urgent_steps:
+    - "Uygulamayı tamamen kapatıp yeniden açın (Task Manager'dan sonlandırın)"
+    - "Bilgisayarı yeniden başlatın"
+    - "Uygulamayı yönetici olarak çalıştırmayı deneyin (sağ tık → Run as admin)"
+  
+  standard_steps:
+    - "Yazılımın en son güncellemesini yükleyin"
+    - "Uygulamayı kaldırıp yeniden kurun (clean install)"
+    - "Uyumluluktmodunu deneyin (Windows 7/8 uyumluluk)"
+    - "Log dosyalarını kontrol edin (genelde C:\\Program Files\\App\\logs)"
+    - "Lisans durumunu kontrol edin"
+  
+  question_response: |
+    Yazılım problemleri:
+    • Çökme/donma: Genelde bellek veya uyumluluk sorunu
+    • Açılmıyor: .NET Framework, Visual C++ gibi dependencies eksik
+    • Lisans hatası: Aktivasyon veya süre bitimi
+    • Yavaşlık: Arka planda çalışan süreçler
+  
+  eta: "10-30 dakika"
+  escalation_threshold: 3
+  priority_keywords: ["açılmıyor", "donuyor", "hata veriyor", "crash"]
+
+"HR Support":
+  greeting_confident: "✅ İnsan Kaynakları talebinizi yönlendiriyorum."
+  greeting_uncertain: "📋 Bu İK departmanıyla ilgili görünüyor."
+  greeting_urgent: "🚨 Acil İK talebinizi iletiyorum!"
+  
+  urgent_steps:
+    - "İK self-service portal: https://hr.company.com"
+    - "Acil durumlar için İK hotline: (555) HR-HELP"
+    - "E-posta: hr@company.com"
+  
+  standard_steps:
+    - "İK portalına giriş yapın: https://hr.company.com"
+    - "İlgili formu doldurun (izin, bordro, vb.)"
+    - "Gerekli belgeleri yükleyin"
+    - "Onay için yöneticinize bildirim gidecektir"
+  
+  question_response: |
+    İK süreçleri:
+    • İzin talepleri: 3 gün önceden bildirim gerekir
+    • Bordro sorunları: Maaş günü: Her ayın 30'u
+    • Belgeler: İK portalından indirebilirsiniz
+    • Performans: Yıllık değerlendirme Aralık ayında
+  
+  eta: "1-2 iş günü"
+  escalation_threshold: 1
+  priority_keywords: ["izin", "maaş", "bordro", "belge"]
+
+Purchase:
+  greeting_confident: "✅ Satın alma talebinizi işleme alıyorum."
+  greeting_uncertain: "📋 Bu satın alma departmanıyla ilgili görünüyor."
+  greeting_urgent: "🚨 Acil satın alma talebinizi yönlendiriyorum!"
+  
+  urgent_steps:
+    - "Satın alma portalı: https://purchase.company.com"
+    - "Acil onay için müdürünüzle görüşün"
+    - "Procurement team: procurement@company.com"
+  
+  standard_steps:
+    - "Satın alma formu doldurun"
+    - "Bütçe kodu alın (finans departmanından)"
+    - "3 teklif toplayın (şirket politikası)"
+    - "Yönetici onayı alın"
+    - "Procurement'a iletin"
+  
+  question_response: |
+    Satın alma süreci:
+    • Limit: 1000 TL altı doğrudan, üstü onay gerekir
+    • Süreç: Ortalama 5-10 iş günü
+    • Tedarikçiler: Onaylı tedarikçi listesi kullanın
+    • Faturalandırma: Merkezi sistem otomatik işler
+  
+  eta: "5-10 iş günü"
+  escalation_threshold: 1
+  priority_keywords: ["sipariş", "satın alma", "onay", "bütçe"]
+
+Storage:
+  greeting_confident: "✅ Depolama sorununuzu tespit ettim."
+  greeting_uncertain: "📋 Bu bir disk alanı/yedekleme problemi olabilir."
+  greeting_urgent: "🚨 Kritik depolama sorununuza bakıyorum!"
+  
+  urgent_steps:
+    - "Gereksiz dosyaları hemen silin (Downloads, Temp klasörleri)"
+    - "Recycle Bin'i boşaltın"
+    - "Büyük dosyaları OneDrive veya network drive'a taşıyın"
+  
+  standard_steps:
+    - "Disk Cleanup aracını çalıştırın (Windows)"
+    - "Eski Windows update dosyalarını silin"
+    - "Program kaldırma: Kullanmadığınız uygulamaları kaldırın"
+    - "Dosyaları cloud'a taşıyın (OneDrive, Google Drive)"
+    - "IT'den disk kapasitesi artırımı talep edin"
+  
+  question_response: |
+    Depolama yönetimi:
+    • Kotanız: Kullanıcı başına 50 GB yerel, 1 TB cloud
+    • Yedekleme: Otomatik olarak her gece yapılır
+    • Arşivleme: 1 yıldan eski dosyalar otomatik arşivlenir
+    • Genişletme: Talep formu IT departmanına
+  
+  eta: "15-30 dakika"
+  escalation_threshold: 2
+  priority_keywords: ["disk dolu", "yer kalmadı", "yedekleme", "kaydedemiyorum"]
+
+Miscellaneous:
+  greeting_confident: "✅ Talebinizi değerlendiriyorum."
+  greeting_uncertain: "📋 Talebinizi inceliyorum, doğru departmana yönlendireceğim."
+  greeting_urgent: "🚨 Talebinizi acil olarak işleme alıyorum!"
+  
+  urgent_steps:
+    - "IT Helpdesk: (555) 123-4567"
+    - "E-posta: support@company.com"
+    - "Acil durumlar için ticket #oluşturuluyor"
+  
+  standard_steps:
+    - "Sorununuzu daha detaylı açıklayabilir misiniz?"
+    - "Hangi sistem/uygulama ile ilgili?"
+    - "Hata mesajı var ise paylaşabilir misiniz?"
+    - "Ne zaman başladı bu sorun?"
+  
+  question_response: |
+    Genel destek:
+    • IT Helpdesk: 7/24 destek
+    • Self-service portal: https://helpdesk.company.com
+    • Knowledge base: Sık sorulan sorular ve çözümler
+    • Ticket sistemi: Takip numarası ile izleme
+  
+  eta: "Değişken"
+  escalation_threshold: 1
+  priority_keywords: ["diğer", "farklı", "başka"]
+
+# Intent detection keywords
+intents:
+  urgent:
+    - "acil"
+    - "urgent"
+    - "kritik"
+    - "critical"
+    - "hemen"
+    - "immediately"
+    - "çalışamıyorum"
+    - "iş yapamıyorum"
+  
+  question:
+    - "nasıl"
+    - "how"
+    - "ne zaman"
+    - "when"
+    - "nerede"
+    - "where"
+    - "neden"
+    - "why"
+    - "ne"
+    - "what"
+  
+  complaint:
+    - "yavaş"
+    - "slow"
+    - "kötü"
+    - "bad"
+    - "berbat"
+    - "çalışmıyor"
+    - "not working"
+
+# Follow-up messages
+followup:
+  solved: "Bu adımlar sorununuzu çözdü mü? 😊"
+  escalate: "Bu adımlar yeterli olmadıysa, size bir destek uzmanı atayayım mı?"
+  more_help: "Başka bir konuda yardımcı olabilir miyim?"
+  feedback: "Hizmetimizi değerlendirir misiniz? ⭐⭐⭐⭐⭐"
+

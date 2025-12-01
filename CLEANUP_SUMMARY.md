@@ -1,5 +1,7 @@
 # 🧹 Klasör Temizleme Özeti
 
+> **Güncelleme (Kasım 2025):** Bu doküman 21 Ekim 2025'teki büyük temizlik operasyonunu özetler. O tarihten sonra `FINAL_SUMMARY.md`, `QUICK_START_1-2_DAYS.md` gibi teslimata özel birkaç dosya kök dizine bilinçli olarak eklenmiştir. Temel klasör yapısı ve prensipler aşağıda korundu.
+
 ## ✅ Yapılan İyileştirmeler
 
 ### 📊 Önceki Durum
@@ -9,12 +11,9 @@
 - Karışık dokümantasyon
 
 ### 🎯 Yeni Durum
-- **Ana klasörde sadece 5 temel dosya:**
-  - `README.md` - Ana dokümantasyon
-  - `requirements.txt` - Bağımlılıklar
-  - `config.yaml` - Konfigürasyon
-  - `Dockerfile` - Deployment
-  - `.gitignore` - Git ayarları
+- **Ana klasörde yalnızca çekirdek dosyalar + proje özetleri var:**
+  - Çekirdek: `README.md`, `requirements.txt`, `config.yaml`, `Dockerfile`, `.gitignore`
+  - Teslimat özetleri (eklenenler): `FINAL_SUMMARY.md`, `CLEANUP_SUMMARY.md`, `QUICK_START_1-2_DAYS.md`
 
 ## 📁 Yeni Klasör Yapısı
 

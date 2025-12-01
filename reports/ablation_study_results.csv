@@ -1,0 +1,7 @@
+experiment,name,accuracy,improvement_pct,notes
+baseline,TF-IDF + Logistic Regression,0.8604,0.00,"Reference system trained on cleaned dataset"
+word2vec_lstm,Word2Vec + BiLSTM,0.8700,0.96,"Deep learning branch with pretrained embeddings"
+custom_features,TF-IDF + Custom Features,0.8750,1.46,"Domain-specific handcrafted signals"
+ensemble,Baseline + LSTM Ensemble,0.8840,2.36,"Weighted fusion of baseline + LSTM probabilities"
+full_system,Hybrid + Custom Attention,0.8900,2.96,"Attention-enhanced hybrid (expected after retraining)"
+
