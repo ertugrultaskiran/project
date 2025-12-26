@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: it-ticket-classifier
+    env: docker
+    dockerfilePath: ./Dockerfile.web
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: PYTHON_VERSION
+        value: 3.10.0
+

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f3f4f6; padding: 2rem; }
+        .chatbot { max-width: 400px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; }
+        .chatbot-header { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 1rem; font-weight: 600; }
+        .chatbot-body { padding: 1.5rem; }
+        .mode-buttons { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .mode-btn { flex: 1; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 0.875rem; font-weight: 600; transition: all 0.2s; }
+        .mode-btn:hover { background: #f3f4f6; }
+        .mode-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
+        textarea { width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 8px; resize: none; font-family: inherit; margin-bottom: 1rem; }
+        .btn-send { width: 100%; padding: 0.75rem; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-send:hover { background: #1d4ed8; }
+        .messages { max-height: 300px; overflow-y: auto; margin-top: 1rem; }
+        .message { margin-bottom: 1rem; padding: 1rem; background: #f3f4f6; border-radius: 8px; }
+        .ai-badge { display: inline-block; padding: 0.25rem 0.75rem; background: #10b981; color: white; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="chatbot">
+        <div class="chatbot-header">
+            🤖 Ticket Classifier v2.0 - TEST
+        </div>
+        <div class="chatbot-body">
+            <div class="mode-buttons">
+                <button class="mode-btn" id="modeClassic" onclick="setMode('classic')">
+                    Classic Mode
+                </button>
+                <button class="mode-btn active" id="modeAI" onclick="setMode('ai')">
+                    ✨ AI Enhanced
+                </button>
+            </div>
+            
+            <textarea id="chatInput" rows="3" placeholder="Describe your IT issue..."></textarea>
+            
+            <button class="btn-send" onclick="sendMessage()">
+                <span id="btnText">🚀 Classify with AI</span>
+            </button>
+            
+            <div class="messages" id="messages"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'ai';
+        
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // Update button styles
+            document.getElementById('modeClassic').classList.toggle('active', mode === 'classic');
+            document.getElementById('modeAI').classList.toggle('active', mode === 'ai');
+            
+            // Update button text
+            document.getElementById('btnText').textContent = 
+                mode === 'ai' ? '🚀 Classify with AI' : '📊 Classify';
+            
+            alert(`Mode changed to: ${mode.toUpperCase()}`);
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            
+            if (!text) {
+                alert('Please enter a ticket description');
+                return;
+            }
+            
+            // Show message
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = `
+                <div class="message">
+                    <div><strong>📝 Your Ticket:</strong></div>
+                    <div>${text}</div>
+                    <div style="margin-top: 1rem;">
+                        <span class="ai-badge">${currentMode === 'ai' ? 'AI MODE' : 'CLASSIC'}</span>
+                        <span style="font-size: 0.875rem;">Processing...</span>
+                    </div>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('/api/classify-with-ai', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ text })
+                });
+                
+                const result = await response.json();
+                
+                // Show result
+                messagesDiv.innerHTML += `
+                    <div class="message" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <div><strong>✅ AI Analysis:</strong></div>
+                        <div style="margin-top: 0.5rem;">
+                            <div>📁 Category: <strong>${result.category}</strong></div>
+                            <div>🎯 Confidence: <strong>${(result.confidence * 100).toFixed(1)}%</strong></div>
+                            <div>😊 Sentiment: <strong>${result.sentiment}</strong></div>
+                            <div>🔥 Priority: <strong>${result.priority}</strong></div>
+                            <div>👥 Route to: <strong>${result.route_to}</strong></div>
+                            <div>⏱️ SLA: <strong>${result.sla_description}</strong></div>
+                        </div>
+                    </div>
+                `;
+                
+                input.value = '';
+            } catch (error) {
+                messagesDiv.innerHTML += `
+                    <div class="message" style="background: #fee2e2; color: #991b1b;">
+                        <strong>❌ Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        // Test on load
+        console.log('✅ AI Chatbot loaded successfully!');
+        console.log('setMode function:', typeof setMode);
+    </script>
+</body>
+</html>
+
+

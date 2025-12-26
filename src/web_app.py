@@ -434,6 +434,244 @@ def reset_conversation():
     return jsonify({"status": "no_session"}), 200
 
 
+@app.route('/api/analytics/trends', methods=['GET'])
+def get_trends():
+    """
+    Get ticket trends over time (last 7/30 days)
+    
+    Query params:
+        days: 7 or 30 (default: 7)
+    """
+    try:
+        days = int(request.args.get('days', 7))
+        
+        # Group tickets by date
+        from collections import defaultdict
+        daily_counts = defaultdict(int)
+        daily_confidence = defaultdict(list)
+        
+        for ticket in tickets_history:
+            # Parse timestamp
+            try:
+                ticket_date = datetime.strptime(ticket['timestamp'], '%Y-%m-%d %H:%M:%S').date()
+                date_str = ticket_date.strftime('%Y-%m-%d')
+                daily_counts[date_str] += 1
+                daily_confidence[date_str].append(ticket['confidence'])
+            except:
+                continue
+        
+        # Generate last N days
+        from datetime import timedelta
+        today = datetime.now().date()
+        dates = []
+        counts = []
+        avg_confidences = []
+        
+        for i in range(days - 1, -1, -1):
+            date = today - timedelta(days=i)
+            date_str = date.strftime('%Y-%m-%d')
+            dates.append(date_str)
+            counts.append(daily_counts.get(date_str, 0))
+            
+            if date_str in daily_confidence and daily_confidence[date_str]:
+                avg_conf = sum(daily_confidence[date_str]) / len(daily_confidence[date_str])
+                avg_confidences.append(round(avg_conf * 100, 1))
+            else:
+                avg_confidences.append(0)
+        
+        return jsonify({
+            'dates': dates,
+            'counts': counts,
+            'avg_confidences': avg_confidences
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/analytics/categories', methods=['GET'])
+def get_category_distribution():
+    """Get category distribution for pie chart"""
+    try:
+        if not tickets_history:
+            return jsonify({
+                'categories': [],
+                'counts': []
+            }), 200
+        
+        categories = {}
+        for ticket in tickets_history:
+            cat = ticket['category']
+            categories[cat] = categories.get(cat, 0) + 1
+        
+        # Sort by count
+        sorted_cats = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        
+        return jsonify({
+            'categories': [cat for cat, _ in sorted_cats],
+            'counts': [count for _, count in sorted_cats]
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/analytics/models', methods=['GET'])
+def get_model_performance():
+    """Get model performance comparison"""
+    try:
+        if not tickets_history:
+            return jsonify({
+                'models': [],
+                'avg_confidences': [],
+                'usage_counts': []
+            }), 200
+        
+        model_stats = {}
+        for ticket in tickets_history:
+            model = ticket.get('model_used', 'unknown')
+            if model not in model_stats:
+                model_stats[model] = {'confidences': [], 'count': 0}
+            
+            model_stats[model]['confidences'].append(ticket['confidence'])
+            model_stats[model]['count'] += 1
+        
+        # Calculate averages
+        models = []
+        avg_confidences = []
+        usage_counts = []
+        
+        for model, stats in model_stats.items():
+            models.append(model.upper())
+            avg_conf = sum(stats['confidences']) / len(stats['confidences'])
+            avg_confidences.append(round(avg_conf * 100, 1))
+            usage_counts.append(stats['count'])
+        
+        return jsonify({
+            'models': models,
+            'avg_confidences': avg_confidences,
+            'usage_counts': usage_counts
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/analytics/confidence-distribution', methods=['GET'])
+def get_confidence_distribution():
+    """Get confidence score distribution (histogram data)"""
+    try:
+        if not tickets_history:
+            return jsonify({
+                'ranges': [],
+                'counts': []
+            }), 200
+        
+        # Create bins: 0-50, 50-60, 60-70, 70-80, 80-90, 90-100
+        bins = {
+            '0-50%': 0,
+            '50-60%': 0,
+            '60-70%': 0,
+            '70-80%': 0,
+            '80-90%': 0,
+            '90-100%': 0
+        }
+        
+        for ticket in tickets_history:
+            conf = ticket['confidence'] * 100
+            if conf < 50:
+                bins['0-50%'] += 1
+            elif conf < 60:
+                bins['50-60%'] += 1
+            elif conf < 70:
+                bins['60-70%'] += 1
+            elif conf < 80:
+                bins['70-80%'] += 1
+            elif conf < 90:
+                bins['80-90%'] += 1
+            else:
+                bins['90-100%'] += 1
+        
+        return jsonify({
+            'ranges': list(bins.keys()),
+            'counts': list(bins.values())
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/analytics/summary', methods=['GET'])
+def get_analytics_summary():
+    """Get comprehensive analytics summary"""
+    try:
+        if not tickets_history:
+            return jsonify({
+                'total_tickets': 0,
+                'today_tickets': 0,
+                'avg_confidence': 0,
+                'top_category': 'N/A',
+                'most_used_model': 'N/A',
+                'growth_rate': 0
+            }), 200
+        
+        from datetime import timedelta
+        today = datetime.now().date()
+        yesterday = today - timedelta(days=1)
+        
+        today_count = 0
+        yesterday_count = 0
+        categories = {}
+        models = {}
+        confidences = []
+        
+        for ticket in tickets_history:
+            try:
+                ticket_date = datetime.strptime(ticket['timestamp'], '%Y-%m-%d %H:%M:%S').date()
+                if ticket_date == today:
+                    today_count += 1
+                elif ticket_date == yesterday:
+                    yesterday_count += 1
+            except:
+                pass
+            
+            # Categories
+            cat = ticket['category']
+            categories[cat] = categories.get(cat, 0) + 1
+            
+            # Models
+            model = ticket.get('model_used', 'unknown')
+            models[model] = models.get(model, 0) + 1
+            
+            # Confidences
+            confidences.append(ticket['confidence'])
+        
+        # Top category
+        top_category = max(categories.items(), key=lambda x: x[1])[0] if categories else 'N/A'
+        
+        # Most used model
+        most_used_model = max(models.items(), key=lambda x: x[1])[0] if models else 'N/A'
+        
+        # Growth rate
+        growth_rate = 0
+        if yesterday_count > 0:
+            growth_rate = round(((today_count - yesterday_count) / yesterday_count) * 100, 1)
+        elif today_count > 0:
+            growth_rate = 100
+        
+        return jsonify({
+            'total_tickets': len(tickets_history),
+            'today_tickets': today_count,
+            'avg_confidence': round(sum(confidences) / len(confidences) * 100, 1) if confidences else 0,
+            'top_category': top_category,
+            'most_used_model': most_used_model.upper(),
+            'growth_rate': growth_rate
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""

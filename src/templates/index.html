@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -17,6 +19,16 @@
                     <i class="fas fa-robot"></i>
                     <h1>IT Ticket Classifier</h1>
                 </div>
+                <nav class="main-nav">
+                    <button class="nav-btn active" onclick="switchView('dashboard')" id="navDashboard">
+                        <i class="fas fa-th-large"></i>
+                        Dashboard
+                    </button>
+                    <button class="nav-btn" onclick="switchView('analytics')" id="navAnalytics">
+                        <i class="fas fa-chart-line"></i>
+                        Analytics
+                    </button>
+                </nav>
                 <div class="stats-mini">
                     <div class="stat-item">
                         <span class="stat-label">Total Tickets</span>
@@ -34,6 +46,8 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
+            <!-- Dashboard View -->
+            <div id="dashboardView" class="view-content">
             <!-- Stats Cards -->
             <div class="stats-grid">
                 <div class="stat-card">
@@ -113,6 +127,167 @@
                     </table>
                 </div>
             </div>
+            </div>
+            <!-- End Dashboard View -->
+
+            <!-- Analytics View -->
+            <div id="analyticsView" class="view-content" style="display: none;">
+                <!-- Analytics Header -->
+                <div class="analytics-header">
+                    <div>
+                        <h1><i class="fas fa-chart-bar"></i> Advanced Analytics</h1>
+                        <p class="subtitle">Comprehensive insights and trends for your ticket classification system</p>
+                    </div>
+                    <div class="date-filter">
+                        <label for="dateRange">Time Range:</label>
+                        <select id="dateRange" class="date-select" onchange="loadAnalytics()">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Enhanced Stats Cards -->
+                <div class="stats-grid analytics-stats">
+                    <div class="stat-card enhanced">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="analyticsTotal">0</h3>
+                            <p>Total Tickets</p>
+                            <div class="stat-trend" id="trendTotal">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>0% vs yesterday</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card enhanced">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="analyticsToday">0</h3>
+                            <p>Today's Tickets</p>
+                            <div class="stat-trend positive" id="trendToday">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card enhanced">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="analyticsConfidence">0%</h3>
+                            <p>Avg. Confidence</p>
+                            <div class="stat-trend positive" id="trendConfidence">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>Excellent</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card enhanced">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="analyticsTopModel">-</h3>
+                            <p>Best Model</p>
+                            <div class="stat-trend positive" id="trendModel">
+                                <i class="fas fa-star"></i>
+                                <span>Most Used</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="charts-grid">
+                    <!-- Ticket Trends Chart -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-line"></i> Ticket Trends</h3>
+                            <p>Daily ticket volume and average confidence over time</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="trendsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Category Distribution Chart -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-pie"></i> Category Distribution</h3>
+                            <p>Breakdown of tickets by category</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Model Performance Chart -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-bar"></i> Model Performance</h3>
+                            <p>Average confidence scores by model</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="modelChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Confidence Distribution Chart -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-area"></i> Confidence Distribution</h3>
+                            <p>Distribution of confidence scores across all tickets</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="confidenceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insights Panel -->
+                <div class="insights-panel">
+                    <h3><i class="fas fa-lightbulb"></i> Key Insights</h3>
+                    <div class="insights-grid" id="insightsGrid">
+                        <div class="insight-card">
+                            <div class="insight-icon" style="background: #10b981;">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h4>High Accuracy</h4>
+                                <p>Your models are performing excellently with average confidence above 85%</p>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon" style="background: #3b82f6;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h4>Growing Usage</h4>
+                                <p id="insightUsage">Ticket volume is steady</p>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon" style="background: #f59e0b;">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h4>Top Category</h4>
+                                <p id="insightTopCategory">Most tickets are categorized as Access</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Analytics View -->
         </div>
     </main>
 
@@ -144,13 +319,14 @@
             </div>
             
             <div class="chat-input-area">
-                <select class="model-select" id="modelSelect">
-                    <option value="bert">🌍 BERT (Multilingual) - BEST!</option>
-                    <option value="ensemble">Ensemble Model</option>
-                    <option value="lstm">LSTM Model</option>
-                    <option value="baseline">Baseline Model</option>
-                    <option value="custom">Custom Attention</option>
-                </select>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+                    <button class="mode-btn active" id="modeClassic" onclick="setMode('classic')" style="flex: 1; padding: 0.5rem; border: 2px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 0.75rem; font-weight: 600;">
+                        Classic Mode
+                    </button>
+                    <button class="mode-btn" id="modeAI" onclick="setMode('ai')" style="flex: 1; padding: 0.5rem; border: 2px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 0.75rem; font-weight: 600;">
+                        AI Enhanced
+                    </button>
+                </div>
                 <textarea 
                     class="chat-input" 
                     id="chatInput" 
@@ -159,7 +335,7 @@
                 ></textarea>
                 <button class="btn-send" onclick="sendMessage()">
                     <i class="fas fa-paper-plane"></i>
-                    Classify
+                    <span id="sendButtonText">Classify with AI</span>
                 </button>
             </div>
         </div>
@@ -174,7 +350,14 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}?v=2.0"></script>
+    <script>
+        // Force reload if old version
+        if (!window.setMode) {
+            console.log('Old version detected, reloading...');
+            window.location.reload(true);
+        }
+    </script>
 </body>
 </html>
 
