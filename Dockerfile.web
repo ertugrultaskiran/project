@@ -16,10 +16,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
 COPY src/ ./src/
-COPY data/cleaned_data.csv ./data/cleaned_data.csv
 
-# Create models directory (empty for now, will use mock data)
-RUN mkdir -p models
+# Create directories (will use mock data, no actual data files needed)
+RUN mkdir -p models data
 
 # Set environment variables
 ENV FLASK_APP=src/web_app_minimal.py
