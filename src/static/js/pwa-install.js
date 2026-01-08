@@ -12,6 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
   registerServiceWorker();
   createInstallButton();
   handleAppInstalled();
+  setupHeaderInstallButton();
 });
 
 // Register Service Worker
@@ -80,11 +81,29 @@ function createInstallButton() {
   document.getElementById('pwa-dismiss-btn')?.addEventListener('click', dismissInstallBanner);
 }
 
+// Setup header install button
+function setupHeaderInstallButton() {
+  const headerBtn = document.getElementById('installAppBtn');
+  if (!headerBtn) return;
+  
+  // Show header button if not installed
+  if (!isInstalled) {
+    headerBtn.style.display = 'flex';
+    headerBtn.addEventListener('click', installApp);
+  }
+}
+
 // Capture install prompt event
 window.addEventListener('beforeinstallprompt', (e) => {
   console.log('📲 Install prompt available');
   e.preventDefault();
   deferredPrompt = e;
+  
+  // Show header button immediately
+  const headerBtn = document.getElementById('installAppBtn');
+  if (headerBtn && !isInstalled) {
+    headerBtn.style.display = 'flex';
+  }
   
   // Show install banner after 3 seconds
   setTimeout(() => {
@@ -148,6 +167,13 @@ function handleAppInstalled() {
     console.log('✅ PWA installed successfully!');
     isInstalled = true;
     hideInstallBanner();
+    
+    // Hide header button
+    const headerBtn = document.getElementById('installAppBtn');
+    if (headerBtn) {
+      headerBtn.style.display = 'none';
+    }
+    
     showSuccessNotification('App installed successfully!');
     
     // Track installation (analytics)
