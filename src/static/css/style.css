@@ -1042,3 +1042,368 @@ body {
     }
 }
 
+/* ============================================
+   PWA SPECIFIC STYLES
+   ============================================ */
+
+/* PWA Install Banner */
+.pwa-install-banner {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    width: 90%;
+    max-width: 450px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    z-index: 9999;
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.pwa-install-banner.visible {
+    transform: translateX(-50%) translateY(0);
+}
+
+.pwa-install-banner.hidden {
+    transform: translateX(-50%) translateY(150%);
+}
+
+.pwa-install-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pwa-install-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.pwa-install-text h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    color: white;
+}
+
+.pwa-install-text p {
+    font-size: 0.875rem;
+    margin: 0;
+    opacity: 0.9;
+    color: white;
+}
+
+.pwa-install-button {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.pwa-install-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.pwa-install-button:active {
+    transform: scale(0.98);
+}
+
+.pwa-dismiss-button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.pwa-dismiss-button:hover {
+    opacity: 1;
+}
+
+/* Update Notification */
+.pwa-update-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #10b981;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+}
+
+.pwa-update-notification.visible {
+    transform: translateX(0);
+}
+
+.pwa-update-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pwa-update-content button {
+    background: white;
+    color: #10b981;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pwa-update-content button:hover {
+    transform: scale(1.05);
+}
+
+/* Success Notification */
+.pwa-success-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+}
+
+.pwa-success-notification.visible {
+    transform: translateX(0);
+}
+
+/* iOS Install Modal */
+.pwa-ios-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    padding: 1rem;
+}
+
+.pwa-ios-content {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+    animation: slideUp 0.3s ease;
+}
+
+.pwa-ios-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.pwa-ios-content ol {
+    margin: 1.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.pwa-ios-content li {
+    margin: 0.75rem 0;
+    line-height: 1.6;
+    color: var(--text-dark);
+}
+
+.ios-share-icon {
+    display: inline-block;
+    font-size: 1.2rem;
+    vertical-align: middle;
+    color: #007AFF;
+}
+
+.pwa-ios-content button {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pwa-ios-content button:hover {
+    transform: scale(1.02);
+}
+
+/* PWA Installed Indicator */
+.pwa-installed .header {
+    padding-top: env(safe-area-inset-top, 1.5rem);
+}
+
+/* Offline Indicator */
+.offline-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #ef4444;
+    color: white;
+    text-align: center;
+    padding: 0.75rem;
+    font-weight: 600;
+    z-index: 10002;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+}
+
+.offline-indicator.visible {
+    transform: translateY(0);
+}
+
+/* Mobile Touch Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    /* Larger touch targets for mobile */
+    button,
+    .nav-btn,
+    .stat-card,
+    .ticket-card {
+        min-height: 44px; /* iOS recommended minimum */
+    }
+    
+    /* Remove hover effects on touch devices */
+    .stat-card:hover,
+    .ticket-card:hover,
+    .insight-card:hover {
+        transform: none;
+    }
+    
+    /* Active states for touch feedback */
+    button:active,
+    .nav-btn:active,
+    .stat-card:active,
+    .ticket-card:active {
+        opacity: 0.8;
+        transform: scale(0.98);
+    }
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Safe Area Insets for Notched Devices */
+@supports (padding: env(safe-area-inset-top)) {
+    .header {
+        padding-top: calc(1.5rem + env(safe-area-inset-top));
+    }
+    
+    .chatbot-widget {
+        bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    }
+}
+
+/* Mobile-First Responsive Improvements */
+@media (max-width: 640px) {
+    .pwa-install-banner {
+        width: 95%;
+        bottom: 20px;
+        padding: 1.25rem;
+    }
+    
+    .pwa-install-content {
+        flex-wrap: wrap;
+    }
+    
+    .pwa-install-button {
+        width: 100%;
+        margin: 0.75rem 0 0 0;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+/* Dark Mode Support (if OS prefers dark) */
+@media (prefers-color-scheme: dark) {
+    .pwa-ios-content {
+        background: #1f2937;
+        color: white;
+    }
+    
+    .pwa-ios-content h3,
+    .pwa-ios-content li {
+        color: white;
+    }
+}
+
+/* Loading Indicator for PWA */
+.pwa-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        #667eea, 
+        #764ba2, 
+        transparent
+    );
+    background-size: 200% 100%;
+    animation: loading 2s linear infinite;
+    z-index: 10003;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.pwa-loading.visible {
+    opacity: 1;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+

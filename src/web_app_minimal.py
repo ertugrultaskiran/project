@@ -55,6 +55,18 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/manifest.json')
+def manifest():
+    """Serve PWA manifest"""
+    return app.send_static_file('manifest.json')
+
+
+@app.route('/service-worker.js')
+def service_worker():
+    """Serve service worker"""
+    return app.send_static_file('service-worker.js')
+
+
 @app.route('/test')
 def test_chatbot():
     """Test chatbot page"""
