@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import random
 from ai_features import IntelligentTicketAssistant
+from simple_classifier import classify_ticket, get_top_predictions
 
 app = Flask(__name__)
 app.secret_key = 'test-secret-key'
@@ -63,8 +64,11 @@ def manifest():
 
 @app.route('/service-worker.js')
 def service_worker():
-    """Serve service worker"""
-    return app.send_static_file('service-worker.js')
+    """Serve service worker with correct headers"""
+    response = app.send_static_file('service-worker.js')
+    response.headers['Content-Type'] = 'application/javascript'
+    response.headers['Service-Worker-Allowed'] = '/'
+    return response
 
 
 @app.route('/test')
@@ -364,6 +368,53 @@ def ai_analyze():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/api/classify', methods=['POST'])
+def classify_ticket_simple():
+    """
+    Simple classification (Classic Mode)
+    """
+    try:
+        data = request.get_json()
+        text = data.get('text', '').strip()
+        
+        if not text:
+            return jsonify({"error": "No text provided"}), 400
+        
+        # Intelligent keyword-based classification
+        category, confidence, matched = classify_ticket(text)
+        model_used = 'ensemble'
+        
+        # Get top 3 predictions
+        top_predictions = get_top_predictions(text, top_k=3)
+        
+        # Create ticket
+        ticket_id = f'cls-{len(tickets_history):03d}'
+        ticket = {
+            'id': ticket_id,
+            'text': text,
+            'category': category,
+            'confidence': confidence,
+            'model_used': model_used,
+            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'status': 'classified',
+            'top_predictions': [
+                {'category': cat, 'confidence': conf}
+                for cat, conf in top_predictions
+            ]
+        }
+        
+        # Add to history
+        tickets_history.insert(0, ticket)
+        if len(tickets_history) > 100:
+            tickets_history.pop()
+        
+        return jsonify(ticket), 200
+        
+    except Exception as e:
+        print(f"Classification error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route('/api/classify-with-ai', methods=['POST'])
 def classify_with_ai():
     """
@@ -378,12 +429,12 @@ def classify_with_ai():
         if not text:
             return jsonify({"error": "No text provided"}), 400
         
-        # Mock classification (random for demo)
-        categories = ['Access', 'Hardware', 'HR Support', 'Network', 
-                     'Purchase', 'Software', 'Storage', 'Administrative Rights']
-        category = random.choice(categories)
-        confidence = random.uniform(0.80, 0.98)
-        model_used = random.choice(['bert', 'ensemble', 'lstm'])
+        # Intelligent keyword-based classification
+        category, confidence, matched = classify_ticket(text)
+        model_used = 'ensemble'  # Simulated
+        
+        # Get top 3 predictions
+        top_predictions = get_top_predictions(text, top_k=3)
         
         # AI Analysis
         ai_analysis = ai_assistant.analyze_ticket(text, category, tickets_history)
